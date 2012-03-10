@@ -1,37 +1,11 @@
-window.dhtmlHistory.create({
-        toJSON: function(o) {
-                return JSON.stringify(o);
-        }
-        , fromJSON: function(s) {
-                return JSON.parse(s);
-        }
-});
-
-var yourListener = function(newLocation, historyData) {
-        console.log(newLocation);
-		console.log(historyData);
-		getCurrentPage();
-}
-
-window.onload = function() {
-        dhtmlHistory.initialize();
-        dhtmlHistory.addListener(yourListener);
-};
-
-
 $(document).ready(function() {
 	getData();
-	getCurrentPage();
-	$(document).delegate('.lists', 'click', function() {
-		$('#main-screen').removeClass('active-page').addClass('inactive-page');
-		$('#list-page').removeClass('inactive-page').addClass('active-page');
-		window.location.hash='#list-page';
-	});
 });
 
-function getCurrentPage() {
+$(window).hashchange(function(e){getCurrentPage(e)});
+
+function getCurrentPage(e) {
 	var hash = window.location.hash;
-	console.log(hash.length);
 	if (hash.length != 0) {
 		$('#main-screen').removeClass('active-page').addClass('inactive-page');
 		$(hash).removeClass('inactive-page').addClass('active-page');
@@ -153,6 +127,7 @@ function makeListPage() {
 	var stored;
 	var dataChange=false;
 	var timesPlayed;
+	var lastLetter='';
 	var HTML='<div class="spacer"></div>';
 	for (var i=0;i<=ISOlist.length-1;i++) {
 		iso = ISOlist[i].name;
@@ -168,8 +143,13 @@ function makeListPage() {
 		}
 		else timesPlayed = stored.timesPlayed;
 		if (HTML.indexOf('list-divider-'+letter)==-1) {
-			HTML+='<div class="list-item" id="list-divider-'+letter+'"><div class="list-divider">'+letter+'</div></div>';
+			if (lastLetter!='' && lastLetter != letter) {
+				HTML+='</div>';
+			}
+			HTML+='<div class="scrollcontainer"><div class="list-item header" id="list-divider-'+letter+'"><div class="list-divider">'+letter+'</div></div>';
+			lastLetter=letter;
 		}
+		
 		HTML+='<div class="list-item" id="'+id+'"><div class="list-item-icon"></div><span class="list-item-text">'+iso+'</span></div>';
 	}
 	//Native approach should be faster

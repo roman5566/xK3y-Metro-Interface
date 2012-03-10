@@ -26,7 +26,7 @@
 .list-item {
 	padding-bottom:6px;
 	padding-top:6px;
-
+	background-color:black;
 }
 
 .list-divider {
@@ -95,7 +95,9 @@
 }
 
 .tile-title {
-	position:absolute;
+	position:relative;
+	display:inline;
+	top:150px;
 }
 
 .active-page {
@@ -109,6 +111,11 @@
 img {
 	display:block;
 	width:173px;
+}
+
+a {
+	text-decoration:none;
+	color:white;
 }
 
 html {
