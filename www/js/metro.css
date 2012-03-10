@@ -1,0 +1,119 @@
+.main-container {
+	background-color:#000000;
+	width:480px;
+	height:800px;
+	top:0px;
+	left:0px;
+	padding-left:12px;
+	padding-top:12px;
+	position:absolute;
+	white-space:nowrap;
+	//letter-spacing: -4px;
+}
+
+.tile {
+	width:173px;
+	height:173px;
+	margin:6px;
+	display:inline-block;
+	background-color:#3399cc;
+}
+
+.spacer {
+	padding:3px;
+}
+
+.list-item {
+	padding-bottom:6px;
+	padding-top:6px;
+
+}
+
+.list-divider {
+	width:60px;
+	height:60px;
+	display:inline-block;
+	margin-left:6px;
+	margin-right:6px;
+	border:1px solid;
+	border-color:#3399cc;
+	color:#3399cc;
+	font-size:54px;
+	line-height:64px;
+}
+
+.list-item-icon {
+	width:62px;
+	height:62px;
+	display:inline-block;
+	margin-left:6px;
+	margin-right:6px;
+	background-color:#3399cc;
+	vertical-align:middle;
+}
+
+.list-item-text {
+	display:inline;
+	font-size:32px;
+	top:6px;
+	position:relative;
+	//line-height:0px;
+}
+
+.folder {
+	background-image:url('../img/folder.png');
+	background-size: 173px 173px;
+}
+
+.config {
+	background-image:url('../img/config.png');
+	background-size: 173px 173px;
+}
+
+.favs {
+	background-image:url('../img/favs.png');
+	background-size: 173px 173px;
+}
+
+.info {
+	background-image:url('../img/info.png');
+	background-size: 173px 173px;
+}
+
+.search {
+	background-image:url('../img/search.png');
+	background-size: 173px 173px;
+}
+
+.lists {
+	background-image:url('../img/lists.png');
+	background-size: 173px 173px;
+}
+
+.title {
+	margin-left:6px;
+}
+
+.tile-title {
+	position:absolute;
+}
+
+.active-page {
+	display:inline-block;
+}
+
+.inactive-page {
+	display:none;
+}
+
+img {
+	display:block;
+	width:173px;
+}
+
+html {
+	color:white;
+	background-color:black;
+	font-family:"Segoe WP","Segoe UI";
+	overflow-x:hidden;
+}
