@@ -1,21 +1,3 @@
-$(document).ready(function() {
-	getData();
-});
-
-$(window).hashchange(function(e){getCurrentPage(e)});
-
-function getCurrentPage(e) {
-	var hash = window.location.hash;
-	if (hash.length != 0) {
-		$('#main-screen').removeClass('active-page').addClass('inactive-page');
-		$(hash).removeClass('inactive-page').addClass('active-page');
-	}
-	else {
-		$('#main-screen').removeClass('inactive-page').addClass('active-page');
-		$('#list-page').removeClass('active-page').addClass('inactive-page');
-	}
-}
-
 //Some global variables needed
 var data;
 var saveData;
@@ -95,12 +77,16 @@ function getData() {
 					}
 					//Experimental pre-loading of the probably most used menus
 					makeListPage();
+					//Get the current page
+					getCurrentPage();
 				},
 				error: function() {
 					//Still make a new empty object, so we can still use it this session
 					saveData={};
 					//Experimental pre-loading of the probably most used menus
 					makeListPage();
+					//Get the current page
+					getCurrentPage();
 				}
 			});
 		}
@@ -125,8 +111,6 @@ function makeListPage() {
 	var cover;
 	var letter;
 	var stored;
-	var dataChange=false;
-	var timesPlayed;
 	var lastLetter='';
 	var HTML='<div class="spacer"></div>';
 	for (var i=0;i<=ISOlist.length-1;i++) {
@@ -134,28 +118,69 @@ function makeListPage() {
 		id = ISOlist[i].id;
 		cover = ISOlist[i].image;
 		letter = iso.charAt(0).toLowerCase();
-		stored = saveData[id];
-		timesPlayed;
-		if (stored == null) {
-			saveData[id] = {"timesPlayed": 0, "lastPlayed": 0};
-			timesPlayed = 0;
-			dataChange=true;
-		}
-		else timesPlayed = stored.timesPlayed;
+
 		if (HTML.indexOf('list-divider-'+letter)==-1) {
 			if (lastLetter!='' && lastLetter != letter) {
 				HTML+='</div>';
 			}
-			HTML+='<div class="scrollcontainer"><div class="list-item header" id="list-divider-'+letter+'"><div class="list-divider">'+letter+'</div></div>';
+			HTML+='<a href="#overlay" onclick="openLetterOverlay()"><div class="scrollcontainer"><div class="list-item header" id="list-divider-'+letter+'"><div class="list-divider">'+letter+'</div></div></a>';
 			lastLetter=letter;
 		}
 		
-		HTML+='<div class="list-item" id="'+id+'"><div class="list-item-icon"></div><span class="list-item-text">'+iso+'</span></div>';
+		HTML+='<a href="#details-page?'+id+'&'+escape(iso)+'"><div class="list-item game" id="'+id+'"><div class="list-item-icon" style="background-image:url(img/test.jpg);background-size:62px 62px"></div><span class="list-item-text">'+iso+'</span></div></a>';
+		if (i == ISOlist.length-1) {
+			HTML+='<div class="list-item"><div class="list-item-icon"></div><span class="list-item-text">I\'m an empty item</span></div>';
+		}
 	}
 	//Native approach should be faster
 	document.getElementById('list-page').innerHTML=HTML;
-	
-	if (dataChange) {
-		$.post('store.sh',JSON.stringify(saveData));
-	}
+}
+
+function prepDetails(id, name) {
+	var url = 'covers/'+id+'.xml';
+	$.ajax({
+		type: "GET",
+		url: url,
+		dataType: "xml",
+		cache: false,
+		success: function(xml) {
+			//Prepare title HTML
+			var title;
+			if ($(xml).find('title').text()=="No Title") title = unescape(name);
+			else title = $(xml).find('title').text();
+			var summary = $(xml).find('summary').text();
+			var summary="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+			var HTML='<div class="spacer"></div><div class="details-container"><span class="details-title">'+title+'</span><br/><br/><img class="details-cover" src="covers/'+id+'.jpg"/>'+summary+'<div class="details-button-pane"><a class="button" href="javascript:launchGame(\''+id+'\');" style="float:left">Play</a><a class="button" href="javascript:history.back();" style="float:right">Close</a></div></div>';
+			document.getElementById('details-page').innerHTML=HTML;
+		},
+		error: function() {
+			var summary="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+			var HTML='<div class="spacer"></div><div class="details-container"><span class="details-title">'+name+'</span><br/><br/><img class="details-cover" src="img/test.jpg"/>'+summary+'<div class="details-button-pane"><a class="button" href="javascript:launchGame(\''+id+'\');" style="float:left">Play</a><a class="button" href="javascript:history.back();" style="float:right">Close</a></div></div>';
+			document.getElementById('details-page').innerHTML=HTML;
+		}
+	});
+}
+
+function launchGame(id) {
+	var url = "launchgame.sh?"+id;
+	$.ajax({
+		type: "GET",
+		url: "data.xml",
+		dataType: "xml",
+		cache: false,
+		success: function(xml) {
+			var tray = $(xml).find('TRAYSTATE').text();
+			var guistate = $(xml).find("GUISTATE").text();
+			if (tray == 0) {
+				$.get(url);
+            }
+			else if (tray == 1 && guistate == 1) {
+				MessageBox.Show('Loading Notification', 'Please open your DVD tray.');
+				$.get(url);
+			}
+			else if (tray == 1 && guistate == 2) {
+				MessageBox.Show('Loading Notification', 'A game appears to be already loaded, please open your DVD tray and click "Reload"', '<a class="button" href="javascript:MessageBox.Close();launchGame(\''+id+'\')">Reload</a>');
+			}
+		}
+	});
 }
