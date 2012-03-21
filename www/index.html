@@ -1,0 +1,66 @@
+<!DOCTYPE HTML> 
+<html>
+	<head>
+		<title>xK3y Remote Web Interface</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link type="text/css" rel="stylesheet" href="js/metro.css" />
+		<script type="text/javascript" src="js/min.js"></script>
+		<script type="text/javascript" src="js/utils.js"></script>
+		<script type="text/javascript" src="js/code.js"></script>
+	</head>
+	<body>
+		<div id="MessageBox" class="page active"></div>
+		<div id="overlay" class="page"></div>
+		<div class="main-container">
+			<span class="title">XK3Y WEB INTERFACE</span><br/>
+			<div class="page active" id="main-screen">
+				<div class="tile wall">
+					<span class="tile-title">cover wall</span>
+				</div>
+				<a href="#list-page"><div class="tile lists">
+					<span class="tile-title">lists</span>
+				</div></a>
+				<br/>
+				<div class="tile folder">
+					<span class="tile-title">folder structure</span>
+				</div>
+				<div class="tile favs">
+					<span class="tile-title">favorites</span>
+				</div>
+				<br/>
+				<div class="tile search">
+					<span class="tile-title">search</span>
+				</div>
+				<div class="tile config">
+					<span class="tile-title">config</span>
+				</div>
+				<br/>
+				<div class="tile info">
+					<span class="tile-title">info</span>
+				</div>
+				<div class="tile">
+					<span class="tile-title">empty tile</span>
+				</div>
+				<br/>
+				<div class="tile">
+					<span class="tile-title">trololol</span>
+				</div>
+			</div>
+			<div id="list-page" class="page"></div>
+			<div id="details-page" class="page"></div>
+		</div>
+		<div id="appBar" class="appbar invis">
+			<center>
+				<a href="javascript:history.back()">
+					<img src="img/back.png"/>
+				</a>
+				<a href="#">
+					<img src="img/home.png"/>
+				</a>
+				<a href="javascript:history.forward()">
+					<img src="img/forward.png"/>
+				</a>
+			</center>
+		</div>
+	</body>
+</html>
