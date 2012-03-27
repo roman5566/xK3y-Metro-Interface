@@ -1,7 +1,7 @@
 .main-container {
 	background-color:#000000;
 	width:468px;
-	height:788px;
+	height:716px;
 	top:0px;
 	left:0px;
 	padding-left:12px;
@@ -9,21 +9,6 @@
 	position:absolute;
 	white-space:nowrap;
 	z-index:-1;
-}
-
-.appbar {
-	position:fixed;
-	background-color:#181C18;
-	height:72px;
-	width:480px;
-	bottom:0px;
-	left:0px;
-}
-
-.appbar img {
-	margin:12px 12px 12px 0px;
-	width:48px;
-	display:inline;
 }
 
 #main-screen {
