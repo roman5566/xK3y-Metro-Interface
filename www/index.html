@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>xK3y Remote Web Interface</title>
-		<meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0" />
+		<meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0,width=480,height=728"/>
 		<link type="text/css" rel="stylesheet" href="js/metro.css" />
 		<script type="text/javascript" src="js/min.js"></script>
 		<script type="text/javascript" src="js/utils.js"></script>
@@ -12,41 +12,65 @@
 		<div id="MessageBox" class="page active"></div>
 		<div id="overlay" class="page"></div>
 		<div class="main-container">
+			<div class="spacer"></div>
 			<span class="title">XK3Y WEB INTERFACE</span><br/>
 			<div class="page active" id="main-screen">
-				<div class="tile wall">
+				<div class="tile wall accent">
 					<span class="tile-title">cover wall</span>
 				</div>
-				<a href="#list-page"><div class="tile lists">
+				<a href="#list-page"><div class="tile lists accent">
 					<span class="tile-title">lists</span>
 				</div></a>
 				<br/>
-				<div class="tile folder">
+				<div class="tile folder accent">
 					<span class="tile-title">folder structure</span>
 				</div>
-				<div class="tile favs">
+				<div class="tile favs accent">
 					<span class="tile-title">favorites</span>
 				</div>
 				<br/>
-				<div class="tile search">
+				<div class="tile search accent">
 					<span class="tile-title">search</span>
 				</div>
-				<div class="tile config">
+				<a href="#config-page"><div class="tile config accent">
 					<span class="tile-title">config</span>
-				</div>
+				</div></a>
 				<br/>
-				<div class="tile info">
+				<div class="tile info accent">
 					<span class="tile-title">info</span>
 				</div>
-				<div class="tile">
+				<div class="tile accent">
 					<span class="tile-title">empty tile</span>
 				</div>
 				<br/>
-				<div class="tile">
+				<div class="tile accent troll">
 					<span class="tile-title">trololol</span>
 				</div>
 			</div>
 			<div id="list-page" class="page"></div>
+			<div id="config-page" class="page">
+				<span class="details-container">
+					<div class="spacer"></div><div class="spacer"></div>
+					<span class="details-title">config</span>
+					<br/><br/>
+					Change the accent color and background to match your mood.<br/><br/>
+					<span style="font-size:14px;">Accent color</span>
+					<a href="#overlay?grey" onclick="accentPopup(this);" id="accentSelect" class="dropdown">
+						<div class="accentIconSmall accent"></div>
+						<span class="dropdownText">blue</span>
+					</a>
+					<br/><br/><br/><br/>
+					<span style="font-size:14px;">Background</span>
+					<a onclick="backgroundDropdown();" id="backgroundSelect" class="dropdown">
+						<div id="dark" class="dropdown-item dropdown-active">
+							<span class="dropdownText">dark</span>
+						</div>
+						<div id="light" class="dropdown-item invis">
+							<span onclick="setBackground(this.innerHTML)" class="dropdownText">light</span>
+						</div>
+					</a>
+				</span>
+			</div>
 			<div id="details-page" class="page"></div>
 		</div>
 	</body>

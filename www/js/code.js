@@ -79,6 +79,8 @@ function getData() {
 					makeListPage();
 					//Get the current page
 					getCurrentPage();
+					
+					Settings.init();
 				},
 				error: function() {
 					//Still make a new empty object, so we can still use it this session
@@ -87,6 +89,8 @@ function getData() {
 					makeListPage();
 					//Get the current page
 					getCurrentPage();
+					
+					Settings.init();
 				}
 			});
 		}
@@ -123,14 +127,11 @@ function makeListPage() {
 			if (lastLetter!='' && lastLetter != letter) {
 				HTML+='</div>';
 			}
-			HTML+='<a href="#overlay" onclick="openLetterOverlay()"><div class="scrollcontainer"><div class="list-item header" id="list-divider-'+letter+'"><div class="list-divider">'+letter+'</div></div></a>';
+			HTML+='<a href="#overlay?black" onclick="openLetterOverlay()"><div class="scrollcontainer"><div class="list-item header" id="list-divider-'+letter+'"><div class="list-divider accent-text accent-border">'+letter+'</div></div></a>';
 			lastLetter=letter;
 		}
 		
-		HTML+='<a href="#details-page?'+id+'&'+escape(iso)+'"><div class="list-item game" id="'+id+'"><div class="list-item-icon" style="background-image:url(img/test.jpg);background-size:62px 62px"></div><span class="list-item-text">'+iso+'</span></div></a>';
-		if (i == ISOlist.length-1) {
-			HTML+='<div class="list-item"><div class="list-item-icon"></div><span class="list-item-text">I\'m an empty item</span></div>';
-		}
+		HTML+='<a href="#details-page?'+id+'&'+escape(iso)+'"><div class="list-item game" id="'+id+'"><div class="list-item-icon accent" style=""></div><span class="list-item-text">'+iso+'</span></div></a>';
 	}
 	//Native approach should be faster
 	document.getElementById('list-page').innerHTML=HTML;
@@ -154,11 +155,12 @@ function prepDetails(id, name) {
 			document.getElementById('details-page').innerHTML=HTML;
 		},
 		error: function() {
-			var summary="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-			var HTML='<div class="spacer"></div><div class="details-container"><span class="details-title">'+name+'</span><br/><br/><img class="details-cover" src="img/test.jpg"/>'+summary+'<div class="details-button-pane"><a class="button" href="javascript:launchGame(\''+id+'\');" style="float:left">Play</a><a class="button" href="javascript:history.back();" style="float:right">Close</a></div></div>';
+			var summary="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+			var HTML='<div class="spacer"></div><span class="details-container"><span class="details-title">'+name+'</span><br/><br/><img class="details-cover" src="img/test.jpg"/>'+summary+'<div class="details-button-pane"><a class="button" href="javascript:launchGame(\''+id+'\');" style="float:left">Play</a><a class="button" href="javascript:history.back();" style="float:right">Close</a></div></span>';
 			document.getElementById('details-page').innerHTML=HTML;
 		}
 	});
+	scrollUp();
 }
 
 function launchGame(id) {

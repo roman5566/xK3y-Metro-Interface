@@ -1,4 +1,6 @@
 var firstLoad=true;
+var colors = ['blue','red','green','mango','pink','brown','lime','teal','purple','magenta'];
+var dropDownFlag;
 
 $(document).ready(function() {
 	getData();
@@ -24,13 +26,14 @@ function showPage(page) {
 	if (page==null) {
 		page='#main-screen';
 	}
-	if (page=='#overlay' && firstLoad) {
-		page='#list-page';
-		window.location.hash=page;
-	}
 	if (page.indexOf('?')!=-1) {
 		args=page.split('?',2);
 		page=args[0];
+	}
+	if (page=='#overlay' && firstLoad) {
+		//page='#list-page';
+		//window.location.hash=page;
+		history.back();
 	}
 	if (page.indexOf('#')!=0) {
 		page = '#'+page;
@@ -54,23 +57,15 @@ function showPage(page) {
 		else if (page=='#list-page') {
 			scrollToLetter(args[1]);
 		}
+		
+		if (args[1]=='grey') {
+			$(args[0]).css('background-color','#181C18');
+		}
+		else if (args[1]=='black') {
+			$(args[0]).css('background-color','');
+		}
 	}
-	appBar(page);
-	firstLoad=false;
 	return true;
-}
-
-function appBar(page) {
-	if (page=='#main-screen' || page=='#overlay' || page=='#details-page') {
-		if ($('#appBar').hasClass('active')) {
-			$('#appBar').removeClass('active');
-		}
-	}
-	else {
-		if (!$('#appBar').hasClass('active')) {
-			$('#appBar').addClass('active');
-		}
-	}
 }
 
 function openLetterOverlay() {
@@ -87,7 +82,7 @@ function openLetterOverlay() {
 			HTML+='<div class="overlay-item overlay-grey">'+letters[i]+'</div>'
 		}
 		else {
-			HTML+='<a href="#list-page?'+letters[i]+'"><div class="overlay-item">'+letters[i]+'</div></a>'
+			HTML+='<a href="javascript:location.replace(\'#list-page?'+letters[i]+'\');"><div class="overlay-item '+saveData.Settings.accent+'">'+letters[i]+'</div></a>'
 		}
 		cur++;
 		if(cur == 4) {
@@ -96,10 +91,57 @@ function openLetterOverlay() {
 		}
 	}
 	document.getElementById('overlay').innerHTML=HTML;
+	firstLoad=false;
+}
+
+function accentPopup() {
+	var HTML='';
+	var current=saveData['Settings'].accent;
+	for (var i=0; i<colors.length; i++) {
+		if (colors[i]==current) {
+			HTML+='<a href="javascript:history.back()" onclick="accentChange(\''+colors[i]+'\')"><div class="accent-item"><div class="accent-item-icon '+colors[i]+'"></div><span class="accent-item-text '+colors[i]+'-text">'+colors[i]+'</span></div></a>';
+		}
+		else {
+			HTML+='<a href="javascript:history.back()" onclick="accentChange(\''+colors[i]+'\')"><div class="accent-item"><div class="accent-item-icon '+colors[i]+'"></div><span class="accent-item-text">'+colors[i]+'</span></div></a>';
+		}
+	}
+	document.getElementById('overlay').innerHTML=HTML;
+	firstLoad=false;
+}
+
+function accentChange(color) {
+	var cur=saveData['Settings'].accent;
+	$('.accent').removeClass(cur).addClass(color);
+	$('.accent-text').removeClass(cur+'-text').addClass(color+'-text');
+	$('.accent-border').removeClass(cur+'-border').addClass(color+'-border');
+	$('#accentSelect span').html(color);
+	saveData['Settings'].accent=color;
+}
+
+function backgroundDropdown() {
+	if (!dropDownFlag) {
+		var dropDown = $('#backgroundSelect');
+		var current = dropDown.children('.dropdown-active');
+		current.children('span').attr('onclick', 'setBackground(this.innerHTML)');
+		current.removeClass('dropdown-active');
+		dropDown.children('.dropdown-item').slideDown();
+		dropDown.attr('onclick','');
+		dropDownFlag=true;
+	}
+}
+
+function setBackground(color) {
+	if (dropDownFlag) {
+		var dropDown = $('#backgroundSelect');
+		$('#'+color).addClass('dropdown-active').attr('onclick','');
+		dropDown.children('.dropdown-item:not(.dropdown-active)').slideUp();
+		dropDown.attr('onclick','backgroundDropdown()');
+		setTimeout('dropDownFlag=false',1);
+	}
 }
 
 var MessageBox = {
-	Show: function (title, text, buttonHTML) {
+	'Show': function (title, text, buttonHTML) {
 		var HTML = '<span class="messagebox-title">'+title+'</span>';
 		HTML +=	'<span class="messagebox-text">'+text+'</span>';
 		if (buttonHTML==null) {
@@ -110,12 +152,46 @@ var MessageBox = {
 		}
 		$('#MessageBox').html(HTML);
 		$('#MessageBox').addClass('active');
+		scrollUp();
 	}, 
-	Close: function () {
+	'Close': function () {
 		$('#MessageBox').removeClass('active');
 	}
 }
 
+var Settings = {
+	'init': function () {
+		var settings = saveData['Settings'];
+		var accent;
+		if ($.isEmptyObject(settings)) {
+			Settings.firstRun();
+			return;
+		}
+		else {
+			accent=settings.accent;
+		}
+		accentChange(accent);
+	},
+	
+	'save': function () {
+		$.post('store.sh', JSON.stringify(saveData));
+	},
+	
+	'firstRun': function () {
+		//First run settings, defaults go here
+		var settings = {};
+		settings.accent='blue';
+		saveData['Settings']=settings;
+		Settings.save();
+		Settings.init();
+	}
+	
+}
+
 function scrollToLetter(letter) {
 	window.scroll(0,$('#list-divider-'+letter).offset().top);
+}
+
+function scrollUp() {
+	window.scroll(0,0);
 }
