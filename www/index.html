@@ -9,57 +9,112 @@
 		<script type="text/javascript" src="js/code.js"></script>
 	</head>
 	<body>
+		<!-- MessageBox Placeholder -->
 		<div id="MessageBox" class="page active"></div>
+		<!-- Overlay Placeholder -->
 		<div id="overlay" class="page"></div>
 		<div class="main-container">
 			<div class="spacer"></div>
 			<span class="title">XK3Y WEB INTERFACE</span><br/>
 			<div class="page active" id="main-screen">
-				<div class="tile wall accent">
-					<span class="tile-title">cover wall</span>
-				</div>
-				<a href="#list-page"><div class="tile lists accent">
-					<span class="tile-title">lists</span>
-				</div></a>
+				<!-- Cover Wall Tile -->
+				<a href="#coverwall-page">
+					<div class="tile wall accent">
+						<span class="tile-title">cover wall</span>
+					</div>
+				</a>
+				<!-- List Tile -->
+				<a href="#list-page">
+					<div class="tile lists accent">
+						<span class="tile-title">lists</span>
+					</div>
+				</a>
 				<br/>
-				<div class="tile folder accent">
-					<span class="tile-title">folder structure</span>
-				</div>
-				<div class="tile favs accent">
-					<span class="tile-title">favorites</span>
-				</div>
+				<!-- Folder Structure Tile -->
+				<a href="#folderstructure-page">
+					<div class="tile folder accent">
+						<span class="tile-title">folder structure</span>
+					</div>
+				</a>
+				<!-- Favorites Tile -->
+				<a href="#favorites-page">
+					<div class="tile favs accent">
+						<span class="tile-title">favorites</span>
+					</div>
+				</a>
 				<br/>
-				<div class="tile search accent">
-					<span class="tile-title">search</span>
-				</div>
-				<a href="#config-page"><div class="tile config accent">
-					<span class="tile-title">config</span>
-				</div></a>
+				<!-- Search Tile -->
+				<a href="#search-page">
+					<div class="tile search accent">
+						<span class="tile-title">search</span>
+					</div>
+				</a>
+				<!-- Config Tile -->
+				<a href="#config-page">
+					<div class="tile config accent">
+						<span class="tile-title">config</span>
+					</div>
+				</a>
 				<br/>
-				<div class="tile info accent">
-					<span class="tile-title">info</span>
-				</div>
-				<div class="tile accent">
-					<span class="tile-title">empty tile</span>
-				</div>
-				<br/>
-				<div class="tile accent troll">
-					<span class="tile-title">trololol</span>
+				<!-- About Tile -->
+				<a href="#about-page">
+					<div class="tile about accent">
+						<span class="tile-title">about</span>
+					</div>
+				</a>
+				<br/><br/>
+			</div>
+			<!-- Cover Wall Page Placeholder -->
+			<div id="coverwall-page" class="page">
+				<div class="spacer"></div><div class="spacer"></div>
+				<span class="page-title">cover wall</span><br/>
+				<div class="page-wrapper">
+					<br/>
+					Nothing to see here yet.
 				</div>
 			</div>
+			<!-- List Page Placeholder -->
 			<div id="list-page" class="page"></div>
+			<!-- Folder Structure Page Placeholder -->
+			<div id="folderstructure-page" class="page">
+				<div class="spacer"></div><div class="spacer"></div>
+				<span class="page-title">folder structure</span><br/>
+				<div class="page-wrapper">
+					<br/>
+					Nothing to see here yet.
+				</div>
+			</div>
+			<!-- Favorites Page Placeholder -->
+			<div id="favorites-page" class="page">
+				<div class="spacer"></div><div class="spacer"></div>
+				<span class="page-title">favorites</span><br/>
+				<div class="page-wrapper">
+					<br/>
+					Nothing to see here yet.
+				</div>
+			</div>
+			<!-- Search Page Placeholder -->
+			<div id="search-page" class="page">
+				<div class="spacer"></div><div class="spacer"></div>
+				<span class="page-title">search</span><br/>
+				<div class="page-wrapper">
+					<br/>
+					Nothing to see here yet.
+				</div>
+			</div>
+			<!-- Config Page Markup -->
 			<div id="config-page" class="page">
-				<span class="details-container">
-					<div class="spacer"></div><div class="spacer"></div>
-					<span class="details-title">config</span>
-					<br/><br/>
+				<div class="spacer"></div><div class="spacer"></div>
+				<span class="page-title">config</span><br/>
+				<div class="page-wrapper">
+					</br>
 					Change the accent color and background to match your mood.<br/><br/>
 					<span style="font-size:14px;">Accent color</span>
-					<a href="#overlay?grey" onclick="accentPopup(this);" id="accentSelect" class="dropdown">
+					<a href="#overlay?grey" onclick="accentPopup(this)" id="accentSelect" class="dropdown">
 						<div class="accentIconSmall accent"></div>
 						<span class="dropdownText">blue</span>
-					</a>
-					<br/><br/><br/><br/>
+					</a><br/><br/><br/>
+					<!--<br/><br/><br/><br/>
 					<span style="font-size:14px;">Background</span>
 					<a onclick="backgroundDropdown();" id="backgroundSelect" class="dropdown">
 						<div id="dark" class="dropdown-item dropdown-active">
@@ -68,9 +123,27 @@
 						<div id="light" class="dropdown-item invis">
 							<span onclick="setBackground(this.innerHTML)" class="dropdownText">light</span>
 						</div>
-					</a>
-				</span>
+					</a>-->
+				</div>
 			</div>
+			<!-- About Page Markup -->
+			<div id="about-page" class="page">
+				<div class="spacer"></div><div class="spacer"></div>
+				<span class="page-title">about</span><br/>
+				<div class="page-wrapper">
+					<br/>
+					<span class="about-title">xk3y information</span></br>
+					<div id="xk3y-about" class="about-items"></div>
+					<br/>
+					<span class="about-title">other information</span></br>
+					<div class="about-items">
+						Made by Mr_Waffle<br/>
+						Version: <span id="version"></span><br/>
+					</div>
+					<br/>
+				</div>
+			</div>
+			<!-- Game Details Page Placeholder -->
 			<div id="details-page" class="page"></div>
 		</div>
 	</body>

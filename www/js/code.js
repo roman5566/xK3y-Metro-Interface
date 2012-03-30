@@ -1,3 +1,4 @@
+var version='0.01';
 //Some global variables needed
 var data;
 var saveData;
@@ -75,8 +76,8 @@ function getData() {
 						//Else use the saved stats
 						saveData=response;
 					}
-					//Experimental pre-loading of the probably most used menus
 					makeListPage();
+					makeAbout();
 					//Get the current page
 					getCurrentPage();
 					
@@ -85,8 +86,9 @@ function getData() {
 				error: function() {
 					//Still make a new empty object, so we can still use it this session
 					saveData={};
-					//Experimental pre-loading of the probably most used menus
+
 					makeListPage();
+					makeAbout();
 					//Get the current page
 					getCurrentPage();
 					
@@ -116,7 +118,7 @@ function makeListPage() {
 	var letter;
 	var stored;
 	var lastLetter='';
-	var HTML='<div class="spacer"></div>';
+	var HTML='<div class="page-wrapper"><div class="spacer"></div><div class="spacer"></div><span class="page-title">list</span></div>';
 	for (var i=0;i<=ISOlist.length-1;i++) {
 		iso = ISOlist[i].name;
 		id = ISOlist[i].id;
@@ -133,8 +135,18 @@ function makeListPage() {
 		
 		HTML+='<a href="#details-page?'+id+'&'+escape(iso)+'"><div class="list-item game" id="'+id+'"><div class="list-item-icon accent" style=""></div><span class="list-item-text">'+iso+'</span></div></a>';
 	}
+	HTML+='</div>';
 	//Native approach should be faster
 	document.getElementById('list-page').innerHTML=HTML;
+}
+
+function makeAbout() {
+	var HTML='';
+	for (var i=0; i<data.about.length; i++) {
+		HTML += data.about[i].item+': '+data.about[i].value+'<br/>';
+	}
+	document.getElementById('xk3y-about').innerHTML=HTML;
+	document.getElementById('version').innerHTML=version;
 }
 
 function prepDetails(id, name) {
@@ -150,13 +162,12 @@ function prepDetails(id, name) {
 			if ($(xml).find('title').text()=="No Title") title = unescape(name);
 			else title = $(xml).find('title').text();
 			var summary = $(xml).find('summary').text();
-			var summary="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-			var HTML='<div class="spacer"></div><div class="details-container"><span class="details-title">'+title+'</span><br/><br/><img class="details-cover" src="covers/'+id+'.jpg"/>'+summary+'<div class="details-button-pane"><a class="button" href="javascript:launchGame(\''+id+'\');" style="float:left">Play</a><a class="button" href="javascript:history.back();" style="float:right">Close</a></div></div>';
+			var HTML='<div class="spacer"></div><div class="spacer"></div><span class="page-title">'+title+'</span><div class="page-wrapper"><br/><img class="details-cover" src="covers/'+id+'.jpg"/>'+summary+'<div class="details-button-pane"><a class="button" href="javascript:launchGame(\''+id+'\');" style="float:left">Play</a><a class="button" href="javascript:history.back();" style="float:right">Close</a></div></div>';
 			document.getElementById('details-page').innerHTML=HTML;
 		},
 		error: function() {
-			var summary="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-			var HTML='<div class="spacer"></div><span class="details-container"><span class="details-title">'+name+'</span><br/><br/><img class="details-cover" src="img/test.jpg"/>'+summary+'<div class="details-button-pane"><a class="button" href="javascript:launchGame(\''+id+'\');" style="float:left">Play</a><a class="button" href="javascript:history.back();" style="float:right">Close</a></div></span>';
+			var summary="Betrayed by the ruling families of Italy, a young man embarks upon an epic quest for vengeance. To eradicate corruption and restore his family's honor, he will study the secrets of an ancient Codex, written by Altaïr. To his allies, he will become a force for change - fighting for freedom and justice. To his enemies, he will become a dark knight - dedicated to the destruction of the tyrants abusing the people of Italy. His name is Ezio Auditore da Firenze. He is an Assassin."
+			var HTML='<div class="spacer"></div><div class="spacer"></div><span class="page-title">'+name+'</span><br/><div class="page-wrapper"><br/><img class="details-cover" src="img/test.jpg"/>'+summary+'<div class="details-button-pane"><a class="button" href="javascript:launchGame(\''+id+'\');" style="float:left">Play</a><a class="button" href="javascript:history.back();" style="float:right">Close</a></div></div>';
 			document.getElementById('details-page').innerHTML=HTML;
 		}
 	});

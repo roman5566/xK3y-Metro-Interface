@@ -8,10 +8,9 @@
 
 .main-container {
 	background-color:#000000;
-	width:100%;
-	height:100%;
 	top:0px;
 	left:0px;
+	right:0px;
 	padding-left:12px;
 	position:absolute;
 	white-space:nowrap;
@@ -28,9 +27,7 @@
 	position:absolute;
 	top:0px;
 	left:0px;
-	overflow:hidden;
 	width:100%;
-	height:100%;
 }
 
 #MessageBox {
@@ -39,7 +36,7 @@
 	position:fixed;
 	top:0px;
 	left:0px;
-	width:468px;
+	width:100%;
 	padding: 12px 0px 18px 18px;
 }
 
@@ -47,7 +44,7 @@
 	margin-bottom:6px;
 	display:block;
 	font-family:"Segoe WP bold";
-	font-size:24px;
+	font-size:24pt;
 }
 
 .messagebox-text {
@@ -56,11 +53,22 @@
 }
 
 #MessageBox .button {
-	margin:18px 18px 0 0;
+	margin:18px 36px 0 0;
 }
 
 .spacer {
 	padding:3px;
+}
+
+.page-wrapper {
+	padding-left:6px;
+}
+
+.page-title {
+	position:relative;
+	font-size: 54pt;
+	line-height:40px;
+	white-space:nowrap;
 }
 
 /*.game {
@@ -75,8 +83,8 @@
 	margin-top:12px;
 	background-color:#3399cc;
 	color:white;
-	font-size:62px;
-	line-height:100px;
+	font-size:32pt;
+	line-height:124px;
 	padding-left:10px;
 }
 
@@ -86,16 +94,16 @@
 }
 
 .list-divider {
-	width:52px;
-	height:58px;
+	width:62px;
+	height:68px;
 	display:inline-block;
 	margin-left:6px;
 	margin-right:6px;
 	border:2px solid;
 	border-color:#3399cc;
 	color:#3399cc;
-	font-size:45px;
-	line-height:60px;
+	font-size:40pt;
+	line-height:73px;
 	padding-left:6px;
 }
 
@@ -106,8 +114,8 @@
 }
 
 .list-item-icon, .accent-item-icon {
-	width:62px;
-	height:62px;
+	width:72px;
+	height:72px;
 	display:inline-block;
 	margin-left:6px;
 	margin-right:6px;
@@ -116,24 +124,29 @@
 }
 
 .accent-item-icon {
-	width:31px;
-	height:31px;
+	width:40px;
+	height:40px;
 }
 
 .accent-item {
-	padding-bottom:12px;
-	padding-top:12px;
+	padding-bottom:18px;
+	padding-top:18px;
+	padding-left:12px;
 }
 
 .list-item-text, .accent-item-text {
 	display:inline;
-	font-size:32px;
-	top:6px;
+	font-size:32pt;
+	top:10px;
+	padding-left:12px;
 	position:relative;
 }
 
-.details-container {
-	margin-left:6px;
+.page-wrapper {
+	position:relative;
+	width:100%;
+	padding-left:6px;
+	padding-right:6px;
 	white-space:normal;
 	display:inline-block;
 }
@@ -145,20 +158,25 @@
 	padding-top:6px;
 	float:left;
 	clear:left;
-}
-
-.details-title {
-	position:absolute;
-	font-size: 54px;
-	line-height:30px;
-	left:15px;
-	white-space:nowrap;
+	width:180px!important;
 }
 
 .details-button-pane {
 	position:relative;
 	bottom:12px;
 	left:-18px;
+	padding-right:6px;
+}
+
+.about-title {
+	color:#888888;
+	font-size:21pt;
+}
+
+.about-items {
+	color:#bbbbbb;
+	font-size:19px;
+	line-height:22px;
 }
 
 a.button {
@@ -171,14 +189,14 @@ a.button {
     text-decoration: none;
 	text-align:center;
 	font-weight:bold;
-	width:189px;
+	width:186px;
 }
 
 .dropdown {
 	margin-left:0px;
 	margin-right:12px;
 	right:18px;
-	left:18px;
+	left:6px;
 	background-color:white;
 	padding:6px;
 	display:block;
@@ -225,8 +243,8 @@ a.button {
 	background-size: 173px 173px;
 }
 
-.info {
-	background-image:url('../img/info.png');
+.about {
+	background-image:url('../img/about.png');
 	background-size: 173px 173px;
 }
 
@@ -257,7 +275,7 @@ a.button {
 .tile-title {
 	position:relative;
 	display:inline;
-	top:140px;
+	top:139px;
 	left:12px;
 	word-spacing:0px;
 }
@@ -268,6 +286,9 @@ a.button {
 
 .page {
 	display:none;
+	position:relative;
+	width:100%;
+	overflow-x:hidden;
 }
 
 .invis {
@@ -286,7 +307,7 @@ a {
 
 @font-face{
     font-family:"Segoe WP";
-    src: url(SegoeWP-Semilight.ttf) format("truetype");
+    src: url(SegoeWP-light.ttf) format("truetype");
 }
 
 @font-face{
@@ -294,12 +315,15 @@ a {
     src: url(SegoeWP-Semibold.ttf) format("truetype");
 }
 
+.bold {
+	font-family:"Segoe WP bold";
+}
+
 html {
 	color:white;
 	background-color:black;
 	font-family:"Segoe WP","Segoe UI";
-	font-size:19px;
-	overflow-x:hidden;
+	font-size:15pt;
 }
 
 .blue {
