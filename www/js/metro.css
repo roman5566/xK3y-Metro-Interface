@@ -31,7 +31,7 @@
 }
 
 #MessageBox {
-	background-color:#181C18;
+	background-color:#1F1F1F;
 	z-index:9999;
 	position:fixed;
 	top:0px;
@@ -71,9 +71,9 @@
 	white-space:nowrap;
 }
 
-/*.game {
-	padding-left: 31px;
-}*/
+.game {
+	margin-left: 6px;
+}
 
 .overlay-item {
 	width:78px;
@@ -84,8 +84,9 @@
 	background-color:#3399cc;
 	color:white;
 	font-size:32pt;
-	line-height:124px;
+	line-height:126px;
 	padding-left:10px;
+	
 }
 
 .overlay-grey {
@@ -111,16 +112,22 @@
 	padding-bottom:6px;
 	padding-top:6px;
 	background-color:black;
+	white-space:nowrap;
 }
 
 .list-item-icon, .accent-item-icon {
 	width:72px;
 	height:72px;
 	display:inline-block;
-	margin-left:6px;
 	margin-right:6px;
 	background-color:#3399cc;
 	vertical-align:middle;
+	
+}
+
+.clip {
+	position:absolute;
+	clip:rect(0px,72px,72px,0px);
 }
 
 .accent-item-icon {
@@ -129,8 +136,8 @@
 }
 
 .accent-item {
-	padding-bottom:18px;
-	padding-top:18px;
+	padding-bottom:24px;
+	padding-top:24px;
 	padding-left:12px;
 }
 
@@ -140,6 +147,7 @@
 	top:10px;
 	padding-left:12px;
 	position:relative;
+	line-height:0;
 }
 
 .page-wrapper {
@@ -192,15 +200,24 @@ a.button {
 	width:186px;
 }
 
+.searchinput {
+	padding:12px;
+	font-size:15pt;
+}
+
 .dropdown {
 	margin-left:0px;
 	margin-right:12px;
 	right:18px;
 	left:6px;
-	background-color:white;
+	background-color:#BEBEBE;
 	padding:6px;
 	display:block;
 	position:absolute;
+}
+
+.dropdown:active {
+	background-color:white!important;
 }
 
 .dropdown-item {
@@ -275,7 +292,7 @@ a.button {
 .tile-title {
 	position:relative;
 	display:inline;
-	top:139px;
+	top:142px;
 	left:12px;
 	word-spacing:0px;
 }
@@ -305,14 +322,22 @@ a {
 	color:white;
 }
 
-@font-face{
-    font-family:"Segoe WP";
-    src: url(SegoeWP-light.ttf) format("truetype");
+@font-face { 
+	font-family: "Segoe WP"; 
+	src: url("segoewp-light-webfont.eot"); 
+	src: local("?"), 
+		url("segoewp-light-webfont.woff") format("woff"), 
+		url("segoewp-light-webfont.ttf") format("truetype"), 
+		url("segoewp-light-webfont.svg#SegoeWPLight") format("svg"); 
 }
 
-@font-face{
-    font-family:"Segoe WP bold";
-    src: url(SegoeWP-Semibold.ttf) format("truetype");
+@font-face { 
+	font-family: "Segoe WP bold"; 
+	src: url("segoewp-semibold-webfont.eot"); 
+	src: local("?"), 
+		url("segoewp-semibold-webfont.woff") format("woff"), 
+		url("segoewp-semibold-webfont.ttf") format("truetype"), 
+		url("segoewp-semibold-webfont.svg#SegoeWPSemibold") format("svg"); 
 }
 
 .bold {
@@ -322,7 +347,8 @@ a {
 html {
 	color:white;
 	background-color:black;
-	font-family:"Segoe WP","Segoe UI";
+	font-family:"Segoe UI","Segoe UI";
+	font-weight:100;
 	font-size:15pt;
 }
 

@@ -99,7 +99,9 @@
 				<span class="page-title">search</span><br/>
 				<div class="page-wrapper">
 					<br/>
-					Nothing to see here yet.
+					<input name="searchInput" type="text" value="Search..." class="searchinput" onkeyup="search(this.value)" onclick="this.select()"/>
+					<br/><br/>
+					<div id="searchResults"></div>
 				</div>
 			</div>
 			<!-- Config Page Markup -->
@@ -108,7 +110,7 @@
 				<span class="page-title">config</span><br/>
 				<div class="page-wrapper">
 					</br>
-					Change the accent color and background to match your mood.<br/><br/>
+					Change the accent color to match your mood.<br/><br/>
 					<span style="font-size:14px;">Accent color</span>
 					<a href="#overlay?grey" onclick="accentPopup(this)" id="accentSelect" class="dropdown">
 						<div class="accentIconSmall accent"></div>

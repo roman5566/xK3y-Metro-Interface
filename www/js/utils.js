@@ -91,6 +91,7 @@ function openLetterOverlay() {
 		}
 	}
 	document.getElementById('overlay').innerHTML=HTML;
+	document.getElementById('overlay').style.height="100%";
 	firstLoad=false;
 }
 
@@ -106,6 +107,7 @@ function accentPopup() {
 		}
 	}
 	document.getElementById('overlay').innerHTML=HTML;
+	document.getElementById('overlay').style.height="";
 	firstLoad=false;
 }
 

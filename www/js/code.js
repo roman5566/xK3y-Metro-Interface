@@ -59,7 +59,7 @@ function getData() {
 				"dirs" : dirs, 
 				"ISOlist" : ISOlist, 
 				"drives" : drives, 
-				"about" : about 
+				"about" : about
 			};
 			//Serverside storage
 			$.ajax({
@@ -91,7 +91,7 @@ function getData() {
 					makeAbout();
 					//Get the current page
 					getCurrentPage();
-					
+					$('.searchinput').css('width', $(window).width()-66+'px');
 					Settings.init();
 				}
 			});
@@ -119,7 +119,7 @@ function makeListPage() {
 	var stored;
 	var lastLetter='';
 	var HTML='<div class="page-wrapper"><div class="spacer"></div><div class="spacer"></div><span class="page-title">list</span></div>';
-	for (var i=0;i<=ISOlist.length-1;i++) {
+	for (var i=0;i<ISOlist.length;i++) {
 		iso = ISOlist[i].name;
 		id = ISOlist[i].id;
 		cover = ISOlist[i].image;
@@ -133,9 +133,9 @@ function makeListPage() {
 			lastLetter=letter;
 		}
 		
-		HTML+='<a href="#details-page?'+id+'&'+escape(iso)+'"><div class="list-item game" id="'+id+'"><div class="list-item-icon accent" style=""></div><span class="list-item-text">'+iso+'</span></div></a>';
+		HTML+='<a href="#details-page?'+id+'&'+escape(iso)+'"><div class="list-item game" id="'+id+'"><div class="list-item-icon accent"><div class="clip"><img style="width:72px" src="'+cover+'"/></div></div><span class="list-item-text">'+iso+'</span></div></a>';
 	}
-	HTML+='</div>';
+	HTML+='</div><br/>';
 	//Native approach should be faster
 	document.getElementById('list-page').innerHTML=HTML;
 }
@@ -147,6 +147,34 @@ function makeAbout() {
 	}
 	document.getElementById('xk3y-about').innerHTML=HTML;
 	document.getElementById('version').innerHTML=version;
+}
+
+function search(input) {
+	if (input.length==0) {
+		document.getElementById('searchResults').innerHTML="";
+		return;
+	}
+	else {
+		var l = data.ISOlist.length;
+		var allGames = data.ISOlist;
+		var pattern=new RegExp(input,"i");
+		var results=[];
+		for (var i=0; i<l; i++) {
+			if (pattern.test(allGames[i].name)) {
+				results.push(allGames[i]);
+			}
+		}
+		var l = results.length;
+		var HTML='';
+		var name, id, cover;
+		for (var i=0; i<l; i++) {
+			name=results[i].name;
+			id=results[i].id;
+			cover='covers/'+id+'.jpg';
+			HTML+='<a href="#details-page?'+id+'&'+escape(name)+'"><div class="list-item" id="'+id+'"><div class="list-item-icon accent"><div class="clip"><img style="width:72px" src="'+cover+'"/></div></div><span class="list-item-text">'+name+'</span></div></a>';
+		}
+		document.getElementById('searchResults').innerHTML=HTML;
+	}
 }
 
 function prepDetails(id, name) {
