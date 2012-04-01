@@ -1,6 +1,25 @@
 var firstLoad=true;
 var colors = ['blue','red','green','mango','pink','brown','lime','teal','purple','magenta'];
 var dropDownFlag;
+var listsMade=false;
+var wallMade=false;
+var pages = {
+	'#coverwall-page' 		: function(){makeCoverWallPage()},
+	'#list-page' 			: function(args){makeListPage(args)},
+	'#folderstructure-page' : function(){makeFolderStructurePage()},
+	'#favorites-page' 		: function(){makeFavoritesPage()},
+	'#search-page' 			: function(){makeSearchPage()},
+	'#about-page' 			: function(){makeAboutPage()},
+	'#overlay' 				: function(args){makeOverlay(args)},
+	'#details-page' 		: function(args){prepDetails(args)},
+	'#main-screen'			: function(){},
+	'#config-page'			: function(){}
+};
+
+var defaultSettings = {
+	'accent' : 'blue',
+	'metro' : true
+}
 
 $(document).ready(function() {
 	getData();
@@ -31,8 +50,6 @@ function showPage(page) {
 		page=args[0];
 	}
 	if (page=='#overlay' && firstLoad) {
-		//page='#list-page';
-		//window.location.hash=page;
 		history.back();
 	}
 	if (page.indexOf('#')!=0) {
@@ -50,22 +67,11 @@ function showPage(page) {
 		$(page).addClass('active');
 	}
 	if (args!=null) {
-		if (page=='#details-page') {
-			var tmp=args[1].split('&',2);
-			prepDetails(tmp[0],unescape(tmp[1]));
-		}
-		else if (page=='#list-page') {
-			scrollToLetter(args[1]);
-		}
-		
-		if (args[1]=='grey') {
-			$(args[0]).css('background-color','#181C18');
-		}
-		else if (args[1]=='black') {
-			$(args[0]).css('background-color','');
-		}
+		//pages[page](args);
+		//return;
 	}
-	return true;
+	pages[page](args);
+	return;
 }
 
 function openLetterOverlay() {
@@ -118,6 +124,7 @@ function accentChange(color) {
 	$('.accent-border').removeClass(cur+'-border').addClass(color+'-border');
 	$('#accentSelect span').html(color);
 	saveData['Settings'].accent=color;
+	Settings.save();
 }
 
 function backgroundDropdown() {
@@ -174,6 +181,10 @@ var Settings = {
 			Settings.firstRun();
 			return;
 		}
+		else if (!settings.metro) {
+			Settings.firstMetroRun();
+			return;
+		}
 		else {
 			accent=settings.accent;
 		}
@@ -186,13 +197,45 @@ var Settings = {
 	
 	'firstRun': function () {
 		//First run settings, defaults go here
-		var settings = {};
-		settings.accent='blue';
+		var settings = defaultSettings;
 		saveData['Settings']=settings;
 		Settings.save();
 		Settings.init();
-	}
+	},
 	
+	'firstMetroRun': function () {
+		saveData['Settings'] = $.extend(saveData['Settings'],defaultSettings);
+		Settings.save();
+		Settings.init();
+	}
+}
+
+function search(input) {
+	if (input.length==0) {
+		document.getElementById('searchResults').innerHTML="";
+		return;
+	}
+	else {
+		var l = data.ISOlist.length;
+		var allGames = data.ISOlist;
+		var pattern=new RegExp(input,"i");
+		var results=[];
+		for (var i=0; i<l; i++) {
+			if (pattern.test(allGames[i].name)) {
+				results.push(allGames[i]);
+			}
+		}
+		var l = results.length;
+		var HTML='';
+		var name, id, cover;
+		for (var i=0; i<l; i++) {
+			name=results[i].name;
+			id=results[i].id;
+			cover='covers/'+id+'.jpg';
+			HTML+='<a href="#details-page?'+id+'&'+escape(name)+'"><div class="list-item" id="'+id+'"><div class="list-item-icon accent"><div class="clip"><img style="width:72px" src="'+cover+'"/></div></div><span class="list-item-text">'+name+'</span></div></a>';
+		}
+		document.getElementById('searchResults').innerHTML=HTML;
+	}
 }
 
 function scrollToLetter(letter) {

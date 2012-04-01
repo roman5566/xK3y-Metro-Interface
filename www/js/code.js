@@ -16,13 +16,7 @@ function getData() {
 			var drives = [];
 			var about = [];
 			var cache = [];
-			var iso;
-			var id;
-			var par;
-			var dir;
-			var coversrc;
-			var isodata;
-			var cacheImage;
+			var iso, id, par, dir, coversrc, isodata, cacheImage;
 			//Array of HDDs
 			$(xml).find('MOUNT').each(function() {
 				drives.push($(this).attr('NAME'));
@@ -40,9 +34,9 @@ function getData() {
 						"par" : par };
 				ISOlist.push(isodata);
 				//Cache images
-				cacheImage = new Image();
-				cacheImage.src = "covers/"+id+".jpg";
-				cache.push(cacheImage);
+				//cacheImage = new Image();
+				//cacheImage.src = "covers/"+id+".jpg";
+				//cache.push(cacheImage);
 			});
 			//Directories
 			$(xml).find('DIR').each(function() {
@@ -76,22 +70,17 @@ function getData() {
 						//Else use the saved stats
 						saveData=response;
 					}
-					makeListPage();
-					makeAbout();
 					//Get the current page
 					getCurrentPage();
-					
+					//Init settings
 					Settings.init();
 				},
 				error: function() {
 					//Still make a new empty object, so we can still use it this session
 					saveData={};
-
-					makeListPage();
-					makeAbout();
 					//Get the current page
 					getCurrentPage();
-					$('.searchinput').css('width', $(window).width()-66+'px');
+					//Init settings
 					Settings.init();
 				}
 			});
@@ -99,48 +88,103 @@ function getData() {
 	});
 }
 
-function makeListPage() {
-	//Copy the ISOList! We don't want to mess up the other menus
-	var ISOlist = data.ISOlist.slice();
-	//Make it alpabetically listed
-	ISOlist.sort(function(x,y) { 
-		var a = String(x.name).toUpperCase(); 
-		var b = String(y.name).toUpperCase(); 
-		if (a > b) 
-			return 1 
-		if (a < b) 
-			return -1 
-		return 0; 
-	});
-	var iso;
-	var id;
-	var cover;
-	var letter;
-	var stored;
-	var lastLetter='';
-	var HTML='<div class="page-wrapper"><div class="spacer"></div><div class="spacer"></div><span class="page-title">list</span></div>';
-	for (var i=0;i<ISOlist.length;i++) {
-		iso = ISOlist[i].name;
-		id = ISOlist[i].id;
-		cover = ISOlist[i].image;
-		letter = iso.charAt(0).toLowerCase();
-
-		if (HTML.indexOf('list-divider-'+letter)==-1) {
-			if (lastLetter!='' && lastLetter != letter) {
-				HTML+='</div>';
-			}
-			HTML+='<a href="#overlay?black" onclick="openLetterOverlay()"><div class="scrollcontainer"><div class="list-item header" id="list-divider-'+letter+'"><div class="list-divider accent-text accent-border">'+letter+'</div></div></a>';
-			lastLetter=letter;
+function makeCoverWallPage() {
+	if (!wallMade) {
+		//Copy the ISOList! We don't want to mess up the other menus
+		var ISOlist = data.ISOlist.slice();
+		//Make it alpabetically listed
+		ISOlist.sort(function(x,y) { 
+			var a = String(x.name).toUpperCase(); 
+			var b = String(y.name).toUpperCase(); 
+			if (a > b) 
+				return 1 
+			if (a < b) 
+				return -1 
+			return 0; 
+		});
+		var iso, id, cover;
+		var HTML='<br/>';
+		var l=ISOlist.length;
+		var cur=0;
+		for (var i=0;i<l;i++) {
+			iso = ISOlist[i].name;
+			id = ISOlist[i].id;
+			cover = ISOlist[i].image;
+			HTML+='<a href="#details-page?'+id+'&'+escape(iso)+'"><div class="tile accent" style="background-image:url(\''+cover+'\'); background-size: 173px;"><span class="tile-title">&nbsp;</span></div></a>';
+			cur++;
+			/*if (cur == 2) {
+				HTML+='<br/>';
+				cur=0;
+			}*/
 		}
-		
-		HTML+='<a href="#details-page?'+id+'&'+escape(iso)+'"><div class="list-item game" id="'+id+'"><div class="list-item-icon accent"><div class="clip"><img style="width:72px" src="'+cover+'"/></div></div><span class="list-item-text">'+iso+'</span></div></a>';
+		document.getElementById('coverwallcontainer').innerHTML=HTML;
+		//Trigger accentChange to make sure the list gets the correct colors
+		accentChange(saveData['Settings'].accent);
+		wallMade=true;
 	}
-	HTML+='</div><br/>';
-	//Native approach should be faster
-	document.getElementById('list-page').innerHTML=HTML;
 }
 
-function makeAbout() {
+function makeListPage(args) {
+	if (args && listsMade) {
+		scrollToLetter(args[1]);
+		return;
+	}
+	else if (!listsMade) {
+		//Copy the ISOList! We don't want to mess up the other menus
+		var ISOlist = data.ISOlist.slice();
+		//Make it alpabetically listed
+		ISOlist.sort(function(x,y) { 
+			var a = String(x.name).toUpperCase(); 
+			var b = String(y.name).toUpperCase(); 
+			if (a > b) 
+				return 1 
+			if (a < b) 
+				return -1 
+			return 0; 
+		});
+		var iso, id, cover, letter;
+		var lastLetter='';
+		var HTML='<div class="page-wrapper"><div class="spacer"></div><div class="spacer"></div><span class="page-title">list</span></div>';
+		var l=ISOlist.length;
+		for (var i=0;i<l;i++) {
+			iso = ISOlist[i].name;
+			id = ISOlist[i].id;
+			cover = ISOlist[i].image;
+			letter = iso.charAt(0).toLowerCase();
+
+			if (HTML.indexOf('list-divider-'+letter)==-1) {
+				if (lastLetter!='' && lastLetter != letter) {
+					HTML+='</div>';
+				}
+				HTML+='<a href="#overlay?black" onclick="openLetterOverlay()"><div class="scrollcontainer"><div class="list-item header" id="list-divider-'+letter+'"><div class="list-divider accent-text accent-border">'+letter+'</div></div></a>';
+				lastLetter=letter;
+			}
+			
+			HTML+='<a href="#details-page?'+id+'&'+escape(iso)+'"><div class="list-item game" id="'+id+'"><div class="list-item-icon accent" style="background-image:url(\''+cover+'\'); background-size: 72px;"></div><span class="list-item-text">'+iso+'</span></div></a>';
+		}
+		HTML+='</div><br/>';
+		//Native approach should be faster
+		document.getElementById('list-page').innerHTML=HTML;
+		listsMade=true;
+		//Trigger accentChange to make sure the list gets the correct colors
+		accentChange(saveData['Settings'].accent);
+		return;
+	}
+}
+
+function makeFolderStructurePage() {
+	return false;
+}
+
+function makeFavoritesPage() {
+	return false;
+}
+
+function makeSearchPage() {
+	$('.searchinput').css('width', $(window).width()-66+'px');
+}
+
+function makeAboutPage() {
 	var HTML='';
 	for (var i=0; i<data.about.length; i++) {
 		HTML += data.about[i].item+': '+data.about[i].value+'<br/>';
@@ -149,35 +193,21 @@ function makeAbout() {
 	document.getElementById('version').innerHTML=version;
 }
 
-function search(input) {
-	if (input.length==0) {
-		document.getElementById('searchResults').innerHTML="";
-		return;
+function makeOverlay(args) {
+	if (args[1]=='grey') {
+		$(args[0]).css('background-color','#181C18');
 	}
-	else {
-		var l = data.ISOlist.length;
-		var allGames = data.ISOlist;
-		var pattern=new RegExp(input,"i");
-		var results=[];
-		for (var i=0; i<l; i++) {
-			if (pattern.test(allGames[i].name)) {
-				results.push(allGames[i]);
-			}
-		}
-		var l = results.length;
-		var HTML='';
-		var name, id, cover;
-		for (var i=0; i<l; i++) {
-			name=results[i].name;
-			id=results[i].id;
-			cover='covers/'+id+'.jpg';
-			HTML+='<a href="#details-page?'+id+'&'+escape(name)+'"><div class="list-item" id="'+id+'"><div class="list-item-icon accent"><div class="clip"><img style="width:72px" src="'+cover+'"/></div></div><span class="list-item-text">'+name+'</span></div></a>';
-		}
-		document.getElementById('searchResults').innerHTML=HTML;
+	else if (args[1]=='black') {
+		$(args[0]).css('background-color','');
 	}
 }
 
 function prepDetails(id, name) {
+	if (!name) {
+		var tmp=id[1].split('&',2);
+		id = tmp[0];
+		name = tmp[1];
+	}
 	var url = 'covers/'+id+'.xml';
 	$.ajax({
 		type: "GET",
@@ -190,7 +220,7 @@ function prepDetails(id, name) {
 			if ($(xml).find('title').text()=="No Title") title = unescape(name);
 			else title = $(xml).find('title').text();
 			var summary = $(xml).find('summary').text();
-			var HTML='<div class="spacer"></div><div class="spacer"></div><span class="page-title">'+title+'</span><div class="page-wrapper"><br/><img class="details-cover" src="covers/'+id+'.jpg"/>'+summary+'<div class="details-button-pane"><a class="button" href="javascript:launchGame(\''+id+'\');" style="float:left">Play</a><a class="button" href="javascript:history.back();" style="float:right">Close</a></div></div>';
+			var HTML='<div class="spacer"></div><div class="spacer"></div><span class="page-title">'+title+'</span><br/><div class="page-wrapper"><br/><img class="details-cover" src="covers/'+id+'.jpg"/>'+summary+'<div class="details-button-pane"><a class="button" href="javascript:launchGame(\''+id+'\');" style="float:left">Play</a><a class="button" href="javascript:history.back();" style="float:right">Close</a></div></div>';
 			document.getElementById('details-page').innerHTML=HTML;
 		},
 		error: function() {

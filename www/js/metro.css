@@ -40,6 +40,10 @@
 	padding: 12px 0px 18px 18px;
 }
 
+#coverwallcontainer {
+	margin-left:-6px
+}
+
 .messagebox-title {
 	margin-bottom:6px;
 	display:block;
@@ -123,11 +127,6 @@
 	background-color:#3399cc;
 	vertical-align:middle;
 	
-}
-
-.clip {
-	position:absolute;
-	clip:rect(0px,72px,72px,0px);
 }
 
 .accent-item-icon {
@@ -281,8 +280,8 @@ a.button {
 }
 
 .troll {
-	background-image:url('../img/trollface.png');
-	background-size: 173px 173px;
+	background-image:url('../img/test.jpg');
+	background-size: 173px;
 }
 
 .title {
