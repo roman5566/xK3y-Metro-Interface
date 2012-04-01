@@ -91,11 +91,12 @@ function openLetterOverlay() {
 		}
 	}
 	document.getElementById('overlay').innerHTML=HTML;
+	document.getElementById('overlay').style.height="100%";
 	firstLoad=false;
 }
 
 function accentPopup() {
-	var HTML='';
+	var HTML='<div class="accent-item"><br/><span class="title">ACCENTS</span></div>';
 	var current=saveData['Settings'].accent;
 	for (var i=0; i<colors.length; i++) {
 		if (colors[i]==current) {
@@ -106,6 +107,7 @@ function accentPopup() {
 		}
 	}
 	document.getElementById('overlay').innerHTML=HTML;
+	document.getElementById('overlay').style.height="";
 	firstLoad=false;
 }
 
@@ -142,17 +144,22 @@ function setBackground(color) {
 
 var MessageBox = {
 	'Show': function (title, text, buttonHTML) {
-		var HTML = '<span class="messagebox-title">'+title+'</span>';
-		HTML +=	'<span class="messagebox-text">'+text+'</span>';
-		if (buttonHTML==null) {
-			HTML += '<a class="button" href="javascript:MessageBox.Close();" style="float:left">Ok</a><a class="button" href="javascript:MessageBox.Close();" style="float:right">Cancel</a>';
+		if (navigator.userAgent.search('Windows Phone') != -1) {
+			alert(text);
 		}
 		else {
-			HTML += buttonHTML+'<a class="button" href="javascript:MessageBox.Close();" style="float:right">Cancel</a>';
+			var HTML = '<span class="messagebox-title">'+title+'</span>';
+			HTML +=	'<span class="messagebox-text">'+text+'</span>';
+			if (buttonHTML==null) {
+				HTML += '<a class="button" href="javascript:MessageBox.Close();" style="float:left">ok</a>';
+			}
+			else {
+				HTML += buttonHTML+'<a class="button" href="javascript:MessageBox.Close();" style="float:right">Cancel</a>';
+			}
+			$('#MessageBox').html(HTML);
+			$('#MessageBox').addClass('active');
+			scrollUp();
 		}
-		$('#MessageBox').html(HTML);
-		$('#MessageBox').addClass('active');
-		scrollUp();
 	}, 
 	'Close': function () {
 		$('#MessageBox').removeClass('active');
