@@ -309,13 +309,15 @@ var Tile = {
 		var random=Math.floor(Math.random()*l);
 		var cur=tiles[random];
 		Tile.animateNext(cur,random);
-		animCounter=setTimeout(Tile.animateLoop, 2500, tiles);
+		var delay=function(){Tile.animateLoop(tiles)};
+		animCounter=setTimeout(delay, 2500);
 	},
 	'init': function (page) {
 		Tile.log('Animation initiated!');
 		var tiles=$(document.getElementById('main-screen')).find('.animate');
 		var l=tiles.length;
-		animCounter=setTimeout(Tile.animateLoop, 2500, tiles);
+		var delay=function(){Tile.animateLoop(tiles)};
+		animCounter=setTimeout(delay, 2500);
 		$('a[onclick^="Tile"]').find('span').html('click to stop tile animation');
 		$('a[onclick^="Tile"]').attr('onclick','Tile.stop()');
 	},
