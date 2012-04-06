@@ -1,9 +1,11 @@
 .tile {
 	width:173px;
 	height:173px;
-	margin:6px;
+	margin:6px 6px 0;
 	display:inline-block;
 	background-color:#1BA1E2;
+	background-repeat:no-repeat;
+	overflow:hidden;
 }
 
 .main-container {
@@ -40,7 +42,7 @@
 	padding: 12px 0px 18px 18px;
 }
 
-#coverwallcontainer {
+#coverwallcontainer, #folderstructurecontainer {
 	margin-left:-6px
 }
 
@@ -291,7 +293,7 @@ a.button {
 .tile-title {
 	position:relative;
 	display:inline;
-	top:142px;
+	top:139px;
 	left:12px;
 	word-spacing:0px;
 }
@@ -305,6 +307,7 @@ a.button {
 	position:relative;
 	width:100%;
 	overflow-x:hidden;
+	white-space:normal;
 }
 
 .invis {

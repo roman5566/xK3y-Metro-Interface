@@ -1,19 +1,22 @@
 var firstLoad=true;
+var animstep=0;
 var colors = ['blue','red','green','mango','pink','brown','lime','teal','purple','magenta'];
 var dropDownFlag;
 var listsMade=false;
 var wallMade=false;
+var foldersMade=false;
+var t=true;
 var pages = {
-	'#coverwall-page' 		: function(){makeCoverWallPage()},
-	'#list-page' 			: function(args){makeListPage(args)},
-	'#folderstructure-page' : function(){makeFolderStructurePage()},
-	'#favorites-page' 		: function(){makeFavoritesPage()},
-	'#search-page' 			: function(){makeSearchPage()},
-	'#about-page' 			: function(){makeAboutPage()},
-	'#overlay' 				: function(args){makeOverlay(args)},
-	'#details-page' 		: function(args){prepDetails(args)},
-	'#main-screen'			: function(){},
-	'#config-page'			: function(){}
+	'coverwall-page' 		: function(){makeCoverWallPage()},
+	'list-page' 			: function(args){makeListPage(args)},
+	'folderstructure-page' 	: function(args){makeFolderStructurePage(args)},
+	'favorites-page' 		: function(){makeFavoritesPage()},
+	'search-page' 			: function(){makeSearchPage()},
+	'about-page' 			: function(){makeAboutPage()},
+	'overlay' 				: function(args){makeOverlay(args)},
+	'details-page' 			: function(args){prepDetails(args)},
+	'main-screen'			: function(){},
+	'config-page'			: function(){}
 };
 
 var defaultSettings = {
@@ -43,34 +46,39 @@ function showPage(page) {
 	var allPages=[];
 	var args;
 	if (page==null) {
-		page='#main-screen';
+		page='main-screen';
 	}
 	if (page.indexOf('?')!=-1) {
 		args=page.split('?',2);
 		page=args[0];
 	}
-	if (page=='#overlay' && firstLoad) {
+	if (page=='overlay' && firstLoad) {
 		history.back();
 	}
-	if (page.indexOf('#')!=0) {
-		page = '#'+page;
+	if (page.indexOf('#')==0) {
+		page = page.slice(1,page.length);
+	}
+	if (page.indexOf('%')==-1) {
+		page=escape(page);
 	}
 	$('.page').each(function() {
-		allPages.push('#'+this.id);
+		allPages.push(this.id);
 	});
 	for (var i=0;i<allPages.length;i++) {
-		if ($(allPages[i]).hasClass('active')) {
-			$(allPages[i]).removeClass('active');
+		if ($(document.getElementById(allPages[i])).hasClass('active')) {
+			$(document.getElementById(allPages[i])).removeClass('active');
 		}
 	}
-	if (!$(page).hasClass('active')) {
-		$(page).addClass('active');
+	if (!$(document.getElementById(page)).hasClass('active')) {
+		$(document.getElementById(page)).addClass('active');
 	}
 	if (args!=null) {
 		//pages[page](args);
 		//return;
 	}
-	pages[page](args);
+	if (page.indexOf('-dir')==-1) {
+		pages[page](args);
+	}
 	return;
 }
 
@@ -232,10 +240,39 @@ function search(input) {
 			name=results[i].name;
 			id=results[i].id;
 			cover='covers/'+id+'.jpg';
-			HTML+='<a href="#details-page?'+id+'&'+escape(name)+'"><div class="list-item" id="'+id+'"><div class="list-item-icon accent"><div class="clip"><img style="width:72px" src="'+cover+'"/></div></div><span class="list-item-text">'+name+'</span></div></a>';
+			HTML+='<a href="#details-page?'+id+'&'+escape(name)+'"><div class="list-item" id="'+id+'"><div class="list-item-icon accent" style="background-image:url(\''+cover+'\'); background-size: 72px;"></div><span class="list-item-text">'+name+'</span></div></a>';
 		}
 		document.getElementById('searchResults').innerHTML=HTML;
 	}
+}
+
+var Tile = {
+	'animateHalf': function () {
+		$('.troll').animate({backgroundPosition: '0 86'});
+		$('.troll .tile-title').animate({top: '52px'});
+		setTimeout(Tile.animateDown, 3000);
+	},
+	'animateDown': function () {
+		$('.troll').animate({backgroundPosition: '0 173'});
+		$('.troll .tile-title').animate({top: '139px'});
+		setTimeout(Tile.animateUp, 3000);
+	},
+	'animateUp': function () {
+		$('.troll').animate({backgroundPosition: '0 0'});
+		$('.troll .tile-title').animate({top: '-30px'});
+		setTimeout(Tile.animateHalf, 3000);
+	}
+}
+
+function animateTile() {
+	setTimeout(animateDown, 3000);
+}
+
+function updateActive(id) {
+	var color=saveData['Settings'].accent;
+	$('span.accent-text').removeClass(color+'-text accent-text');
+	$('.'+id).children('span').addClass(color+'-text accent-text');
+	data.active=id;
 }
 
 function scrollToLetter(letter) {

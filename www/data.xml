@@ -2,6 +2,7 @@
 <XKEY>
 <GUISTATE>1</GUISTATE>
 <EMERGENCY>2</EMERGENCY>
+<ACTIVE>8f21c54b0ea58abf9f4d446e6abe3ba38b56fa11</ACTIVE>
 <GAMES>
 <MOUNT NAME="My_Book">
 <DIR NAME="Hack &apos;n Slash">
@@ -31,7 +32,7 @@
 </ISO>
 </DIR>
 <DIR NAME="Shooters">
-<DIR NAME="Free-Roam">
+<DIR NAME="Free Roam">
 <ISO>
 <TITLE>GTA IV Complete DVD 1</TITLE>
 <ID>ad510ca8d6d6467a01608afb9aab8e24008ddf45</ID>
