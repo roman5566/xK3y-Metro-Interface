@@ -73,10 +73,6 @@ $.fx.step.backgroundPosition = function(fx) {
 
         fx.unit = [end[1],end[3]];
         fx.bgPosReady = true;
-		animstep++;
-		if (animstep==3) {
-			animstep=0;
-		}
     }
 
     var nowPosX = [];

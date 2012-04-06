@@ -1,5 +1,4 @@
 var firstLoad=true;
-var animstep=0;
 var colors = ['blue','red','green','mango','pink','brown','lime','teal','purple','magenta'];
 var dropDownFlag;
 var listsMade=false;
