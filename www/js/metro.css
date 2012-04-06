@@ -6,6 +6,7 @@
 	background-color:#1BA1E2;
 	background-repeat:no-repeat;
 	overflow:hidden;
+	position:relative;
 }
 
 .main-container {
@@ -291,11 +292,15 @@ a.button {
 }
 
 .tile-title {
-	position:relative;
+	position:absolute;
 	display:inline;
-	top:139px;
-	left:12px;
+	bottom:6px;
+	left:11px;
 	word-spacing:0px;
+}
+
+.tile-animate {
+	bottom:179px;
 }
 
 .active {

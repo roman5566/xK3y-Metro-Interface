@@ -1,6 +1,6 @@
 var firstLoad=true;
 var colors = ['blue','red','green','mango','pink','brown','lime','teal','purple','magenta'];
-var dropDownFlag;
+var dropDownFlag
 var listsMade=false;
 var wallMade=false;
 var foldersMade=false;
@@ -246,25 +246,80 @@ function search(input) {
 }
 
 var Tile = {
-	'animateHalf': function () {
-		$('.troll').animate({backgroundPosition: '0 86'});
-		$('.troll .tile-title').animate({top: '52px'});
-		setTimeout(Tile.animateDown, 3000);
+	'animateHalf': function (tile) {
+		$(tile).animate({backgroundPosition: '0 86px'});
+		$(tile).children('.tile-title').animate({bottom: '92px'});
+		//setTimeout(Tile.animateDown, 2500);
 	},
-	'animateDown': function () {
-		$('.troll').animate({backgroundPosition: '0 173'});
-		$('.troll .tile-title').animate({top: '139px'});
-		setTimeout(Tile.animateUp, 3000);
+	'animateDown': function (tile) {
+		$(tile).animate({backgroundPosition: '0 173px'});
+		$(tile).children('.tile-title').animate({bottom: '6px'});
+		//setTimeout(Tile.animateUp, 2500);
 	},
-	'animateUp': function () {
-		$('.troll').animate({backgroundPosition: '0 0'});
-		$('.troll .tile-title').animate({top: '-30px'});
-		setTimeout(Tile.animateHalf, 3000);
+	'animateUp': function (tile) {
+		$(tile).animate({backgroundPosition: '0 0'});
+		$(tile).children('.tile-title').animate({bottom: '179px'});
+		//setTimeout(Tile.animateHalf, 2500);
+	},
+	'animateNext': function(tile,index) {
+		var doAnim;
+		var random=Math.floor(Math.random()*41);
+		if (random<20) {
+			doAnim=false;
+		}
+		else {
+			doAnim=true;
+		}
+		if (doAnim) {
+			var bgY = $.curCSS(tile,'background-position-y');
+			if (bgY=="") {
+				bgY = $.curCSS(tile,'backgroundPosition');
+			}
+			if(!bgY){//FF2 no inline-style fallback
+				bgY = '0px 0px';
+			}
+			if (bgY.length<=5) {
+				bgY = '0px '+bgY;
+			}
+			var pos=toArray(bgY);
+			var nextState;
+			switch (pos[2]) {
+				case 0:
+					nextState='animateHalf';
+					break;
+				case 86:
+					nextState='animateDown';
+					break;
+				case 173:
+					nextState='animateUp';
+					break;
+				default:
+					alert('You messed up!');
+					break;
+			};
+			Tile[nextState](tile);
+			var dbgText='bgPosY: '+pos[2]+'<br/>nextState: '+nextState+'<br/>curTile:'+index;
+			Tile.log(dbgText);
+			return;
+		}
+		Tile.log('random int lower than 20, delaying animation... ('+random+')');
+	},
+	'animateLoop': function (tiles) {
+		var l = tiles.length;
+		var random=Math.floor(Math.random()*l);
+		var cur=tiles[random];
+		Tile.animateNext(cur,random);
+		setTimeout(Tile.animateLoop, 2500, tiles);
+	},
+	'init': function (page) {
+		Tile.log('Animation initiated!');
+		var tiles=$(document.getElementById('main-screen')).find('.animate');
+		var l=tiles.length;
+		setTimeout(Tile.animateLoop, 2500, tiles);
+	},
+	'log': function (msg) {
+		document.getElementById('tileDebug').innerHTML='Debug:<br/>'+msg;
 	}
-}
-
-function animateTile() {
-	setTimeout(animateDown, 3000);
 }
 
 function updateActive(id) {
@@ -280,4 +335,10 @@ function scrollToLetter(letter) {
 
 function scrollUp() {
 	window.scroll(0,0);
+}
+
+function toArray(strg){
+    strg = strg.replace(/([0-9\.]+)(\s|\)|$)/g,"$1px$2");
+    var res = strg.match(/(-?[0-9\.]+)(px|\%|em|pt)\s(-?[0-9\.]+)(px|\%|em|pt)/);
+    return [parseFloat(res[1],10),res[2],parseFloat(res[3],10),res[4]];
 }
