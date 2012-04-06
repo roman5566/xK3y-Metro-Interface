@@ -1,6 +1,6 @@
 var firstLoad=true;
 var colors = ['blue','red','green','mango','pink','brown','lime','teal','purple','magenta'];
-var dropDownFlag
+var dropDownFlag, animCounter;
 var listsMade=false;
 var wallMade=false;
 var foldersMade=false;
@@ -309,13 +309,23 @@ var Tile = {
 		var random=Math.floor(Math.random()*l);
 		var cur=tiles[random];
 		Tile.animateNext(cur,random);
-		setTimeout(Tile.animateLoop, 2500, tiles);
+		animCounter=setTimeout(Tile.animateLoop, 2500, tiles);
 	},
 	'init': function (page) {
 		Tile.log('Animation initiated!');
 		var tiles=$(document.getElementById('main-screen')).find('.animate');
 		var l=tiles.length;
-		setTimeout(Tile.animateLoop, 2500, tiles);
+		animCounter=setTimeout(Tile.animateLoop, 2500, tiles);
+		if (arguments.callee.caller.name.toString()=='onclick') {
+			$('a[onclick^="Tile"]').find('span').html('click to stop tile animation');
+			$('a[onclick^="Tile"]').attr('onclick','Tile.stop()');
+		}
+	},
+	'stop': function () {
+		clearTimeout(animCounter);
+		$('a[onclick^="Tile"]').find('span').html('click to start tile animation');
+		$('a[onclick^="Tile"]').attr('onclick',"Tile.init('main-screen')");
+		Tile.log('Animation counter cleared!');
 	},
 	'log': function (msg) {
 		document.getElementById('tileDebug').innerHTML='Debug:<br/>'+msg;
