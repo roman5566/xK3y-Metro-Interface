@@ -316,10 +316,8 @@ var Tile = {
 		var tiles=$(document.getElementById('main-screen')).find('.animate');
 		var l=tiles.length;
 		animCounter=setTimeout(Tile.animateLoop, 2500, tiles);
-		if (arguments.callee.caller.name.toString()=='onclick') {
-			$('a[onclick^="Tile"]').find('span').html('click to stop tile animation');
-			$('a[onclick^="Tile"]').attr('onclick','Tile.stop()');
-		}
+		$('a[onclick^="Tile"]').find('span').html('click to stop tile animation');
+		$('a[onclick^="Tile"]').attr('onclick','Tile.stop()');
 	},
 	'stop': function () {
 		clearTimeout(animCounter);
