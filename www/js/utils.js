@@ -42,6 +42,8 @@ function getCurrentPage() {
 }
 
 function showPage(page) {
+	//Always stop tile animation on page change
+	Tile.stop();
 	var allPages=[];
 	var args;
 	if (page==null) {
@@ -78,6 +80,8 @@ function showPage(page) {
 	if (page.indexOf('-dir')==-1) {
 		pages[page](args);
 	}
+	//Trigger tile animation for the page, function determines if there will be animation
+	Tile.init(page);
 	return;
 }
 
@@ -263,8 +267,9 @@ var Tile = {
 	},
 	'animateNext': function(tile,index) {
 		var doAnim;
-		var random=Math.floor(Math.random()*41);
-		if (random<20) {
+		var random=Math.floor(Math.random()*101);
+		//console.log(random);
+		if (random<30) {
 			doAnim=false;
 		}
 		else {
@@ -299,10 +304,10 @@ var Tile = {
 			};
 			Tile[nextState](tile);
 			var dbgText='bgPosY: '+pos[2]+'<br/>nextState: '+nextState+'<br/>curTile:'+index;
-			Tile.log(dbgText);
+			//Tile.log(dbgText);
 			return;
 		}
-		Tile.log('random int lower than 20, delaying animation... ('+random+')');
+		//Tile.log('random int lower than 20, delaying animation... ('+random+')');
 	},
 	'animateLoop': function (tiles) {
 		var l = tiles.length;
@@ -313,19 +318,22 @@ var Tile = {
 		animCounter=setTimeout(delay, 2500);
 	},
 	'init': function (page) {
-		Tile.log('Animation initiated!');
-		var tiles=$(document.getElementById('main-screen')).find('.animate');
+		//Tile.log('Animation initiated!');
+		var tiles=$(document.getElementById(page)).find('.animate');
 		var l=tiles.length;
+		if (l==0) {
+			return;
+		}
 		var delay=function(){Tile.animateLoop(tiles)};
 		animCounter=setTimeout(delay, 2500);
-		$('a[onclick^="Tile"]').find('span').html('click to stop tile animation');
-		$('a[onclick^="Tile"]').attr('onclick','Tile.stop()');
+		//$('a[onclick^="Tile"]').find('span').html('click to stop tile animation');
+		//$('a[onclick^="Tile"]').attr('onclick','Tile.stop()');
 	},
 	'stop': function () {
 		clearTimeout(animCounter);
-		$('a[onclick^="Tile"]').find('span').html('click to start tile animation');
-		$('a[onclick^="Tile"]').attr('onclick',"Tile.init('main-screen')");
-		Tile.log('Animation counter cleared!');
+		//$('a[onclick^="Tile"]').find('span').html('click to start tile animation');
+		//$('a[onclick^="Tile"]').attr('onclick',"Tile.init('main-screen')");
+		//Tile.log('Animation counter cleared!');
 	},
 	'log': function (msg) {
 		document.getElementById('tileDebug').innerHTML='Debug:<br/>'+msg;

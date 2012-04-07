@@ -120,6 +120,7 @@
 	padding-top:6px;
 	background-color:black;
 	white-space:nowrap;
+	position:relative;
 }
 
 .list-item-icon, .accent-item-icon {
@@ -129,7 +130,6 @@
 	margin-right:6px;
 	background-color:#3399cc;
 	vertical-align:middle;
-	
 }
 
 .accent-item-icon {
@@ -183,10 +183,18 @@
 	font-size:21pt;
 }
 
-.about-items {
+.about-items, .list-extra {
 	color:#bbbbbb;
-	font-size:19px;
+	font-size:14pt;
 	line-height:22px;
+}
+
+.list-extra {
+	display:inline;
+	left:120px;
+	position:absolute;
+	top:42px;
+	line-height:24px;
 }
 
 a.button {

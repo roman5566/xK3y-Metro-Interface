@@ -112,7 +112,7 @@ function makeCoverWallPage() {
 			iso = ISOlist[i].name;
 			id = ISOlist[i].id;
 			cover = ISOlist[i].image;
-			HTML+='<a href="#details-page?'+id+'&'+escape(iso)+'"><div class="tile accent" style="background-image:url(\''+cover+'\'); background-size: 173px;"><span class="tile-title">'+iso+'</span></div></a>';
+			HTML+='<a href="#details-page?'+id+'&'+escape(iso)+'"><div class="tile accent animate" style="background-image:url(\''+cover+'\'); background-size: 173px;"><span class="tile-title tile-animate">'+iso+'</span></div></a>';
 			cur++;
 			/*if (cur == 2) {
 				HTML+='<br/>';
@@ -120,7 +120,7 @@ function makeCoverWallPage() {
 			}*/
 		}
 		document.getElementById('coverwallcontainer').innerHTML=HTML;
-		//Trigger accentChange to make sure the list gets the correct colors
+		//Trigger accentChange to make sure the tiles get the correct colors
 		accentChange(saveData['Settings'].accent);
 		wallMade=true;
 	}
@@ -145,6 +145,7 @@ function makeListPage(args) {
 			return 0; 
 		});
 		var iso, id, cover, letter, activeClass;
+		var dataChange=false;
 		var lastLetter='';
 		var active = data.active;
 		var HTML='<div class="page-wrapper"><div class="spacer"></div><div class="spacer"></div><span class="page-title">list</span></div>';
@@ -154,7 +155,7 @@ function makeListPage(args) {
 			id = ISOlist[i].id;
 			cover = ISOlist[i].image;
 			letter = iso.charAt(0).toLowerCase();
-
+			stored = saveData[id];
 			if (HTML.indexOf('list-divider-'+letter)==-1) {
 				if (lastLetter!='' && lastLetter != letter) {
 					HTML+='</div>';
@@ -171,6 +172,7 @@ function makeListPage(args) {
 		HTML+='</div><br/>';
 		//Native approach should be faster
 		document.getElementById('list-page').innerHTML=HTML;
+		$(".easydate").easydate();
 		listsMade=true;
 		//Trigger accentChange to make sure the list gets the correct colors
 		accentChange(saveData['Settings'].accent);
@@ -207,7 +209,7 @@ function makeFolderStructurePage(args) {
 				par1 = escape(par1);
 			}
 			if (!document.getElementById(dir)) {
-				$('<a href="#folderstructure-page?'+dir+'-dir" id="'+dir+'">').html('<div class="tile accent" style="background-image:url(\'img/folder.png\'); background-size: 173px;"><span class="tile-title">'+unescape(dir)+'</span></div>').appendTo(document.getElementById(par1));
+				$('<a href="#folderstructure-page?'+dir+'-dir">').html('<div class="tile accent" style="background-image:url(\'img/folder.png\'); background-size: 173px;"><span class="tile-title">'+unescape(dir)+'</span></div>').appendTo(document.getElementById(par1));
 			}
 		}
 		//Then the ISOs
@@ -229,7 +231,7 @@ function makeFolderStructurePage(args) {
 			if (id==active) {
 				activeClass=' class="activeGame"';
 			}
-			$('<a href="#details-page?'+id+'&'+escape(name)+'">').html('<div class="tile accent" style="background-image:url(\''+cover+'\'); background-size: 173px;"><span class="tile-title">'+name+'</span></div>').appendTo(document.getElementById(par1));
+			$('<a href="#details-page?'+id+'&'+escape(name)+'">').html('<div class="tile accent animate" style="background-image:url(\''+cover+'\'); background-size: 173px;"><span class="tile-title tile-animate">'+name+'</span></div>').appendTo(document.getElementById(par1));
 		};
 		foldersMade=true;
 		if (args) {
