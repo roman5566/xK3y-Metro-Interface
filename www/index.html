@@ -13,7 +13,7 @@
 		<div id="MessageBox" class="page active"></div>
 		<!-- Overlay Placeholder -->
 		<div id="overlay" class="page"></div>
-		<div class="main-container">
+		<div class="main-container" id="main">
 			<div class="spacer"></div>
 			<span class="title">XK3Y WEB INTERFACE</span><br/>
 			<div class="page active" id="main-screen">
@@ -29,7 +29,7 @@
 						<span class="tile-title">lists</span>
 					</div>
 				</a>
-				<br/>
+				
 				<!-- Folder Structure Tile -->
 				<a href="#folderstructure-page">
 					<div class="tile folder accent">
@@ -42,7 +42,7 @@
 						<span class="tile-title">favorites</span>
 					</div>
 				</a>
-				<br/>
+				
 				<!-- Search Tile -->
 				<a href="#search-page">
 					<div class="tile search accent">
@@ -55,13 +55,33 @@
 						<span class="tile-title">config</span>
 					</div>
 				</a>
-				<br/>
+				
 				<!-- About Tile -->
 				<a href="#about-page">
 					<div class="tile about accent">
 						<span class="tile-title">about</span>
 					</div>
 				</a>
+				<div class="tile troll accent animate">
+					<span class="tile-title tile-animate">test</span>
+				</div>
+				<div class="tile troll accent animate">
+					<span class="tile-title tile-animate">test</span>
+				</div>
+				<div class="tile troll accent animate">
+					<span class="tile-title tile-animate">test</span>
+				</div>
+				<div class="tile troll accent animate">
+					<span class="tile-title tile-animate">test</span>
+				</div>
+				<a onclick="Tile.init('main-screen')">
+					<div class="tile accent">
+						<span class="tile-title">click to start tile animation</span>
+					</div>
+				</a>
+				<div class="tile accent">
+					<span class="tile-title" id="tileDebug">debug tile</span>
+				</div>
 				<br/><br/>
 			</div>
 			<!-- Cover Wall Page Placeholder -->
@@ -76,9 +96,8 @@
 			<div id="folderstructure-page" class="page">
 				<div class="spacer"></div><div class="spacer"></div>
 				<span class="page-title">folder structure</span><br/>
-				<div class="page-wrapper">
+				<div class="page-wrapper" id="folderstructurecontainer">
 					<br/>
-					Nothing to see here yet.
 				</div>
 			</div>
 			<!-- Favorites Page Placeholder -->
@@ -141,6 +160,7 @@
 						Working menus:<br/>
 						- coverwall<br/>
 						- lists<br/>
+						- folder structure<br/>
 						- search<br/>
 						- config<br/>
 						- about<br/>

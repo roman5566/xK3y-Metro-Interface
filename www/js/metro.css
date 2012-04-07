@@ -1,9 +1,12 @@
 .tile {
 	width:173px;
 	height:173px;
-	margin:6px;
+	margin:6px 6px 0;
 	display:inline-block;
 	background-color:#1BA1E2;
+	background-repeat:no-repeat;
+	overflow:hidden;
+	position:relative;
 }
 
 .main-container {
@@ -40,7 +43,7 @@
 	padding: 12px 0px 18px 18px;
 }
 
-#coverwallcontainer {
+#coverwallcontainer, #folderstructurecontainer {
 	margin-left:-6px
 }
 
@@ -117,6 +120,7 @@
 	padding-top:6px;
 	background-color:black;
 	white-space:nowrap;
+	position:relative;
 }
 
 .list-item-icon, .accent-item-icon {
@@ -126,7 +130,6 @@
 	margin-right:6px;
 	background-color:#3399cc;
 	vertical-align:middle;
-	
 }
 
 .accent-item-icon {
@@ -180,10 +183,18 @@
 	font-size:21pt;
 }
 
-.about-items {
+.about-items, .list-extra {
 	color:#bbbbbb;
-	font-size:19px;
+	font-size:14pt;
 	line-height:22px;
+}
+
+.list-extra {
+	display:inline;
+	left:120px;
+	position:absolute;
+	top:42px;
+	line-height:24px;
 }
 
 a.button {
@@ -289,11 +300,15 @@ a.button {
 }
 
 .tile-title {
-	position:relative;
+	position:absolute;
 	display:inline;
-	top:142px;
-	left:12px;
+	bottom:6px;
+	left:11px;
 	word-spacing:0px;
+}
+
+.tile-animate {
+	bottom:179px;
 }
 
 .active {
@@ -305,6 +320,7 @@ a.button {
 	position:relative;
 	width:100%;
 	overflow-x:hidden;
+	white-space:normal;
 }
 
 .invis {

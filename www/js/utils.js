@@ -1,19 +1,21 @@
 var firstLoad=true;
 var colors = ['blue','red','green','mango','pink','brown','lime','teal','purple','magenta'];
-var dropDownFlag;
+var dropDownFlag, animCounter;
 var listsMade=false;
 var wallMade=false;
+var foldersMade=false;
+var t=true;
 var pages = {
-	'#coverwall-page' 		: function(){makeCoverWallPage()},
-	'#list-page' 			: function(args){makeListPage(args)},
-	'#folderstructure-page' : function(){makeFolderStructurePage()},
-	'#favorites-page' 		: function(){makeFavoritesPage()},
-	'#search-page' 			: function(){makeSearchPage()},
-	'#about-page' 			: function(){makeAboutPage()},
-	'#overlay' 				: function(args){makeOverlay(args)},
-	'#details-page' 		: function(args){prepDetails(args)},
-	'#main-screen'			: function(){},
-	'#config-page'			: function(){}
+	'coverwall-page' 		: function(){makeCoverWallPage()},
+	'list-page' 			: function(args){makeListPage(args)},
+	'folderstructure-page' 	: function(args){makeFolderStructurePage(args)},
+	'favorites-page' 		: function(){makeFavoritesPage()},
+	'search-page' 			: function(){makeSearchPage()},
+	'about-page' 			: function(){makeAboutPage()},
+	'overlay' 				: function(args){makeOverlay(args)},
+	'details-page' 			: function(args){prepDetails(args)},
+	'main-screen'			: function(){},
+	'config-page'			: function(){}
 };
 
 var defaultSettings = {
@@ -40,37 +42,46 @@ function getCurrentPage() {
 }
 
 function showPage(page) {
+	//Always stop tile animation on page change
+	Tile.stop();
 	var allPages=[];
 	var args;
 	if (page==null) {
-		page='#main-screen';
+		page='main-screen';
 	}
 	if (page.indexOf('?')!=-1) {
 		args=page.split('?',2);
 		page=args[0];
 	}
-	if (page=='#overlay' && firstLoad) {
+	if (page=='overlay' && firstLoad) {
 		history.back();
 	}
-	if (page.indexOf('#')!=0) {
-		page = '#'+page;
+	if (page.indexOf('#')==0) {
+		page = page.slice(1,page.length);
+	}
+	if (page.indexOf('%')==-1) {
+		page=escape(page);
 	}
 	$('.page').each(function() {
-		allPages.push('#'+this.id);
+		allPages.push(this.id);
 	});
 	for (var i=0;i<allPages.length;i++) {
-		if ($(allPages[i]).hasClass('active')) {
-			$(allPages[i]).removeClass('active');
+		if ($(document.getElementById(allPages[i])).hasClass('active')) {
+			$(document.getElementById(allPages[i])).removeClass('active');
 		}
 	}
-	if (!$(page).hasClass('active')) {
-		$(page).addClass('active');
+	if (!$(document.getElementById(page)).hasClass('active')) {
+		$(document.getElementById(page)).addClass('active');
 	}
 	if (args!=null) {
 		//pages[page](args);
 		//return;
 	}
-	pages[page](args);
+	if (page.indexOf('-dir')==-1) {
+		pages[page](args);
+	}
+	//Trigger tile animation for the page, function determines if there will be animation
+	Tile.init(page);
 	return;
 }
 
@@ -232,10 +243,108 @@ function search(input) {
 			name=results[i].name;
 			id=results[i].id;
 			cover='covers/'+id+'.jpg';
-			HTML+='<a href="#details-page?'+id+'&'+escape(name)+'"><div class="list-item" id="'+id+'"><div class="list-item-icon accent"><div class="clip"><img style="width:72px" src="'+cover+'"/></div></div><span class="list-item-text">'+name+'</span></div></a>';
+			HTML+='<a href="#details-page?'+id+'&'+escape(name)+'"><div class="list-item" id="'+id+'"><div class="list-item-icon accent" style="background-image:url(\''+cover+'\'); background-size: 72px;"></div><span class="list-item-text">'+name+'</span></div></a>';
 		}
 		document.getElementById('searchResults').innerHTML=HTML;
 	}
+}
+
+var Tile = {
+	'animateHalf': function (tile) {
+		$(tile).animate({backgroundPosition: '0 86px'});
+		$(tile).children('.tile-title').animate({bottom: '92px'});
+		//setTimeout(Tile.animateDown, 2500);
+	},
+	'animateDown': function (tile) {
+		$(tile).animate({backgroundPosition: '0 173px'});
+		$(tile).children('.tile-title').animate({bottom: '6px'});
+		//setTimeout(Tile.animateUp, 2500);
+	},
+	'animateUp': function (tile) {
+		$(tile).animate({backgroundPosition: '0 0'});
+		$(tile).children('.tile-title').animate({bottom: '179px'});
+		//setTimeout(Tile.animateHalf, 2500);
+	},
+	'animateNext': function(tile,index) {
+		var doAnim;
+		var random=Math.floor(Math.random()*101);
+		//console.log(random);
+		if (random<30) {
+			doAnim=false;
+		}
+		else {
+			doAnim=true;
+		}
+		if (doAnim) {
+			var bgY = $.curCSS(tile,'background-position-y');
+			if (bgY=="") {
+				bgY = $.curCSS(tile,'backgroundPosition');
+			}
+			if(!bgY){//FF2 no inline-style fallback
+				bgY = '0px 0px';
+			}
+			if (bgY.length<=5) {
+				bgY = '0px '+bgY;
+			}
+			var pos=toArray(bgY);
+			var nextState;
+			switch (pos[2]) {
+				case 0:
+					nextState='animateHalf';
+					break;
+				case 86:
+					nextState='animateDown';
+					break;
+				case 173:
+					nextState='animateUp';
+					break;
+				default:
+					alert('You messed up!');
+					break;
+			};
+			Tile[nextState](tile);
+			var dbgText='bgPosY: '+pos[2]+'<br/>nextState: '+nextState+'<br/>curTile:'+index;
+			//Tile.log(dbgText);
+			return;
+		}
+		//Tile.log('random int lower than 20, delaying animation... ('+random+')');
+	},
+	'animateLoop': function (tiles) {
+		var l = tiles.length;
+		var random=Math.floor(Math.random()*l);
+		var cur=tiles[random];
+		Tile.animateNext(cur,random);
+		var delay=function(){Tile.animateLoop(tiles)};
+		animCounter=setTimeout(delay, 2500);
+	},
+	'init': function (page) {
+		//Tile.log('Animation initiated!');
+		var tiles=$(document.getElementById(page)).find('.animate');
+		var l=tiles.length;
+		if (l==0) {
+			return;
+		}
+		var delay=function(){Tile.animateLoop(tiles)};
+		animCounter=setTimeout(delay, 2500);
+		//$('a[onclick^="Tile"]').find('span').html('click to stop tile animation');
+		//$('a[onclick^="Tile"]').attr('onclick','Tile.stop()');
+	},
+	'stop': function () {
+		clearTimeout(animCounter);
+		//$('a[onclick^="Tile"]').find('span').html('click to start tile animation');
+		//$('a[onclick^="Tile"]').attr('onclick',"Tile.init('main-screen')");
+		//Tile.log('Animation counter cleared!');
+	},
+	'log': function (msg) {
+		document.getElementById('tileDebug').innerHTML='Debug:<br/>'+msg;
+	}
+}
+
+function updateActive(id) {
+	var color=saveData['Settings'].accent;
+	$('span.accent-text').removeClass(color+'-text accent-text');
+	$('.'+id).children('span').addClass(color+'-text accent-text');
+	data.active=id;
 }
 
 function scrollToLetter(letter) {
@@ -244,4 +353,10 @@ function scrollToLetter(letter) {
 
 function scrollUp() {
 	window.scroll(0,0);
+}
+
+function toArray(strg){
+    strg = strg.replace(/([0-9\.]+)(\s|\)|$)/g,"$1px$2");
+    var res = strg.match(/(-?[0-9\.]+)(px|\%|em|pt)\s(-?[0-9\.]+)(px|\%|em|pt)/);
+    return [parseFloat(res[1],10),res[2],parseFloat(res[3],10),res[4]];
 }
