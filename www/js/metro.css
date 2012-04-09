@@ -18,6 +18,7 @@
 	position:absolute;
 	white-space:nowrap;
 	z-index:-1;
+	
 }
 
 #main-screen {
@@ -485,4 +486,11 @@ html {
 
 .magenta-border {
 	border-color:#D80073!important;
+}
+
+@media all and (max-device-width: 320px) {
+	.tile {
+		width: 115px;
+		height: 115px;
+	}
 }
