@@ -1,14 +1,16 @@
+//Global variables needed
 var firstLoad=true;
 var colors = ['blue','red','green','mango','pink','brown','lime','teal','purple','magenta'];
-var dropDownFlag, animCounter;
+var dropDownFlag, animCounter, data, saveData;
 var listsMade=false;
 var wallMade=false;
 var foldersMade=false;
 var t=true;
+//All the pages with linked functions
 var pages = {
 	'coverwall-page' 		: function(){makeCoverWallPage()},
 	'list-page' 			: function(args){makeListPage(args)},
-	'folderstructure-page' 	: function(args){makeFolderStructurePage(args)},
+	'folderstructure-page'	: function(args){makeFolderStructurePage(args)},
 	'favorites-page' 		: function(){makeFavoritesPage()},
 	'search-page' 			: function(){makeSearchPage()},
 	'about-page' 			: function(){makeAboutPage()},
@@ -17,7 +19,7 @@ var pages = {
 	'main-screen'			: function(){},
 	'config-page'			: function(){}
 };
-
+//Default settings
 var defaultSettings = {
 	'accent' : 'blue',
 	'metro' : true
@@ -25,6 +27,15 @@ var defaultSettings = {
 
 $(document).ready(function() {
 	getData();
+	if (document.documentElement.clientWidth>480) {
+		viewport = document.querySelector("meta[name=viewport]"); 
+		viewport.setAttribute('content', '');
+	}
+
+	if (document.documentElement.clientWidth==480) {
+		viewport = $('meta[name=viewport]');
+		viewport.attr('content', 'width = 320');
+	}
 });
 
 $(window).hashchange(function() {
@@ -49,6 +60,7 @@ function showPage(page) {
 	if (page==null) {
 		page='main-screen';
 	}
+	//Parse arguments
 	if (page.indexOf('?')!=-1) {
 		args=page.split('?',2);
 		page=args[0];
@@ -65,21 +77,24 @@ function showPage(page) {
 	$('.page').each(function() {
 		allPages.push(this.id);
 	});
+	//Hide all pages
 	for (var i=0;i<allPages.length;i++) {
 		if ($(document.getElementById(allPages[i])).hasClass('active')) {
 			$(document.getElementById(allPages[i])).removeClass('active');
 		}
 	}
+	//Show requested page
 	if (!$(document.getElementById(page)).hasClass('active')) {
 		$(document.getElementById(page)).addClass('active');
 	}
-	if (args!=null) {
-		//pages[page](args);
-		//return;
-	}
-	if (page.indexOf('-dir')==-1) {
+	/*if (args!=null) {
 		pages[page](args);
-	}
+		return;
+	}*/
+	//Call function related to page
+	//if (page.indexOf('-dir')==-1) {
+		pages[page](args);
+	//}
 	//Trigger tile animation for the page, function determines if there will be animation
 	Tile.init(page);
 	return;

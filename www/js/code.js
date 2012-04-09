@@ -91,6 +91,7 @@ function getData() {
 }
 
 function makeCoverWallPage() {
+	//If the page isn't created yet, create it now
 	if (!wallMade) {
 		//Copy the ISOList! We don't want to mess up the other menus
 		var ISOlist = data.ISOlist.slice();
@@ -123,10 +124,12 @@ function makeCoverWallPage() {
 		//Trigger accentChange to make sure the tiles get the correct colors
 		accentChange(saveData['Settings'].accent);
 		wallMade=true;
+		return;
 	}
 }
 
 function makeListPage(args) {
+	//If there are arguments and the page is created, we want to scroll to a letter
 	if (args && listsMade) {
 		scrollToLetter(args[1]);
 		return;
@@ -145,7 +148,6 @@ function makeListPage(args) {
 			return 0; 
 		});
 		var iso, id, cover, letter, activeClass;
-		var dataChange=false;
 		var lastLetter='';
 		var active = data.active;
 		var HTML='<div class="page-wrapper"><div class="spacer"></div><div class="spacer"></div><span class="page-title">list</span></div>';
@@ -155,7 +157,6 @@ function makeListPage(args) {
 			id = ISOlist[i].id;
 			cover = ISOlist[i].image;
 			letter = iso.charAt(0).toLowerCase();
-			stored = saveData[id];
 			if (HTML.indexOf('list-divider-'+letter)==-1) {
 				if (lastLetter!='' && lastLetter != letter) {
 					HTML+='</div>';
@@ -176,6 +177,7 @@ function makeListPage(args) {
 		listsMade=true;
 		//Trigger accentChange to make sure the list gets the correct colors
 		accentChange(saveData['Settings'].accent);
+		//If we had arguments upon creation, scroll to the argument
 		if (args) {
 			scrollToLetter(args[1]);
 		}
@@ -184,6 +186,7 @@ function makeListPage(args) {
 }
 
 function makeFolderStructurePage(args) {
+	//If there are arguments and the page is created, we are requesting a folder
 	if (args && foldersMade) {
 		showPage(args[1]);
 		return;
@@ -199,7 +202,10 @@ function makeFolderStructurePage(args) {
 			chk = data.drives.toString().indexOf(par);
 			//What if the parent directory is a HDD? Make it the content block
 			if ($('div#'+dir+'-dir').length==0) {
+				//Create a new page
 				$('<div id="'+dir+'-dir" class="page"></div>').html('<div class="spacer"></div><div class="spacer"></div><span class="page-title">'+unescape(dir)+'</span><br/><br/>').appendTo(document.getElementById('main'));
+				//Register new page with empty function
+				pages[dir+'-dir']=function(){};
 			}
 			if (chk!=-1) {
 				par1 = 'folderstructurecontainer';
@@ -228,15 +234,19 @@ function makeFolderStructurePage(args) {
 				par1 = par+"-dir";
 			}
 			activeClass='';
+			//If game is active, highlight it
 			if (id==active) {
 				activeClass=' class="activeGame"';
 			}
 			$('<a href="#details-page?'+id+'&'+escape(name)+'">').html('<div class="tile accent animate" style="background-image:url(\''+cover+'\'); background-size: 173px;"><span class="tile-title tile-animate">'+name+'</span></div>').appendTo(document.getElementById(par1));
 		};
 		foldersMade=true;
+		accentChange(saveData['Settings'].accent);
+		//If we had arguments, it means a directory was requested upon creation; show the directory page
 		if (args) {
 			showPage(args[1]);
 		}
+		return;
 	}
 }
 
@@ -245,6 +255,7 @@ function makeFavoritesPage() {
 }
 
 function makeSearchPage() {
+	//Ugly fix for text input width
 	$('.searchinput').css('width', $(window).width()-66+'px');
 }
 
@@ -267,12 +278,14 @@ function makeOverlay(args) {
 }
 
 function prepDetails(id, name) {
+	//If name arg is empty, we came from showPage, parse the id variable
 	if (!name) {
 		var tmp=id[1].split('&',2);
 		id = tmp[0];
 		name = tmp[1];
 	}
 	var url = 'covers/'+id+'.xml';
+	document.getElementById('details-page').innerHTML='';
 	$.ajax({
 		type: "GET",
 		url: url,

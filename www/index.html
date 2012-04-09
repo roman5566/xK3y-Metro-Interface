@@ -2,7 +2,14 @@
 <html>
 	<head>
 		<title>xK3y Remote Web Interface</title>
-		<meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0,width=480,height=728"/>
+		<meta id="viewportmeta" name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0,width=480,height=728"/>
+		<script type="text/javascript">
+		if (screen.width == 480) {
+			var mvp = document.getElementById('testViewport');
+			mvp.setAttribute('content','width=320');
+		}
+		</script>
+
 		<link type="text/css" rel="stylesheet" href="js/metro.css" />
 		<script type="text/javascript" src="js/min.js"></script>
 		<script type="text/javascript" src="js/utils.js"></script>
@@ -62,7 +69,7 @@
 						<span class="tile-title">about</span>
 					</div>
 				</a>
-				<div class="tile troll accent animate">
+				<!--<div class="tile troll accent animate">
 					<span class="tile-title tile-animate">test</span>
 				</div>
 				<div class="tile troll accent animate">
@@ -81,7 +88,7 @@
 				</a>
 				<div class="tile accent">
 					<span class="tile-title" id="tileDebug">debug tile</span>
-				</div>
+				</div>-->
 				<br/><br/>
 			</div>
 			<!-- Cover Wall Page Placeholder -->
@@ -127,13 +134,13 @@
 				<div class="page-wrapper">
 					</br>
 					Change the accent color to match your mood.<br/><br/>
-					<span style="font-size:14px;">Accent color</span>
+					<span style="font-size:14pt;">Accent color</span>
 					<a href="#overlay?grey" onclick="accentPopup(this)" id="accentSelect" class="dropdown">
 						<div class="accentIconSmall accent"></div>
 						<span class="dropdownText">blue</span>
 					</a><br/><br/><br/>
 					<!--<br/><br/><br/><br/>
-					<span style="font-size:14px;">Background</span>
+					<span style="font-size:14pt;">Background</span>
 					<a onclick="backgroundDropdown();" id="backgroundSelect" class="dropdown">
 						<div id="dark" class="dropdown-item dropdown-active">
 							<span class="dropdownText">dark</span>
