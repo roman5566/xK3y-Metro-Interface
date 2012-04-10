@@ -24,6 +24,8 @@
 			<div class="spacer"></div>
 			<span class="title">XK3Y WEB INTERFACE</span><br/>
 			<div class="page active" id="main-screen">
+				<div class="spacer"></div><div class="spacer"></div>
+				<span class="page-title">main</span><br/><br/>
 				<!-- Cover Wall Tile -->
 				<a href="#coverwall-page">
 					<div class="tile wall accent">
@@ -89,7 +91,6 @@
 				<div class="tile accent">
 					<span class="tile-title" id="tileDebug">debug tile</span>
 				</div>-->
-				<br/><br/>
 			</div>
 			<!-- Cover Wall Page Placeholder -->
 			<div id="coverwall-page" class="page">
@@ -98,30 +99,30 @@
 				<div class="page-wrapper" id="coverwallcontainer"></div>
 			</div>
 			<!-- List Page Placeholder -->
-			<div id="list-page" class="page"></div>
+			<div id="list-page" class="page">
+				<div class="spacer"></div><div class="spacer"></div>
+				<span class="page-title">list</span><br/><br/>
+				<div class="page-wrapper" id="listcontainer"></div>
+			</div>
 			<!-- Folder Structure Page Placeholder -->
 			<div id="folderstructure-page" class="page">
 				<div class="spacer"></div><div class="spacer"></div>
-				<span class="page-title">folder structure</span><br/>
-				<div class="page-wrapper" id="folderstructurecontainer">
-					<br/>
-				</div>
+				<span class="page-title">folder structure</span><br/><br/>
+				<div class="page-wrapper" id="folderstructurecontainer"></div>
 			</div>
 			<!-- Favorites Page Placeholder -->
 			<div id="favorites-page" class="page">
 				<div class="spacer"></div><div class="spacer"></div>
-				<span class="page-title">favorites</span><br/>
+				<span class="page-title">favorites</span><br/><br/>
 				<div class="page-wrapper">
-					<br/>
 					Nothing to see here yet.
 				</div>
 			</div>
 			<!-- Search Page Placeholder -->
 			<div id="search-page" class="page">
 				<div class="spacer"></div><div class="spacer"></div>
-				<span class="page-title">search</span><br/>
+				<span class="page-title">search</span><br/><br/>
 				<div class="page-wrapper">
-					<br/>
 					<input name="searchInput" type="text" value="Search..." class="searchinput" onkeyup="search(this.value)" onclick="this.select()"/>
 					<br/><br/>
 					<div id="searchResults"></div>
@@ -130,9 +131,8 @@
 			<!-- Config Page Markup -->
 			<div id="config-page" class="page">
 				<div class="spacer"></div><div class="spacer"></div>
-				<span class="page-title">config</span><br/>
+				<span class="page-title">config</span><br/><br/>
 				<div class="page-wrapper">
-					</br>
 					Change the accent color to match your mood.<br/><br/>
 					<span style="font-size:14pt;">Accent color</span>
 					<a href="#overlay?grey" onclick="accentPopup(this)" id="accentSelect" class="dropdown">
@@ -154,9 +154,8 @@
 			<!-- About Page Markup -->
 			<div id="about-page" class="page">
 				<div class="spacer"></div><div class="spacer"></div>
-				<span class="page-title">about</span><br/>
+				<span class="page-title">about</span><br/><br/>
 				<div class="page-wrapper">
-					<br/>
 					<span class="about-title">xk3y information</span></br>
 					<div id="xk3y-about" class="about-items"></div>
 					<br/>

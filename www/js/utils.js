@@ -27,7 +27,7 @@ var defaultSettings = {
 
 $(document).ready(function() {
 	getData();
-	if (document.documentElement.clientWidth>480) {
+	/*if (document.documentElement.clientWidth>480) {
 		viewport = document.querySelector("meta[name=viewport]"); 
 		viewport.setAttribute('content', '');
 	}
@@ -35,7 +35,7 @@ $(document).ready(function() {
 	if (document.documentElement.clientWidth==480) {
 		viewport = $('meta[name=viewport]');
 		viewport.attr('content', 'width = 320');
-	}
+	}*/
 });
 
 $(window).hashchange(function() {
@@ -44,12 +44,7 @@ $(window).hashchange(function() {
 
 function getCurrentPage() {
 	var hash = window.location.hash;
-	if (hash.length != 0) {
-		showPage(hash);
-	}
-	else {
-		showPage();
-	}
+	showPage(hash);
 }
 
 function showPage(page) {
@@ -57,7 +52,7 @@ function showPage(page) {
 	Tile.stop();
 	var allPages=[];
 	var args;
-	if (page==null) {
+	if (!page) {
 		page='main-screen';
 	}
 	//Parse arguments
@@ -145,9 +140,13 @@ function accentPopup() {
 
 function accentChange(color) {
 	var cur=saveData['Settings'].accent;
+	//Tiles & other solid stuff
 	$('.accent').removeClass(cur).addClass(color);
+	//Highlights
 	$('.accent-text').removeClass(cur+'-text').addClass(color+'-text');
+	//List dividers have a border
 	$('.accent-border').removeClass(cur+'-border').addClass(color+'-border');
+	//Config button show correct color name
 	$('#accentSelect span').html(color);
 	saveData['Settings'].accent=color;
 	Settings.save();
@@ -171,12 +170,14 @@ function setBackground(color) {
 		$('#'+color).addClass('dropdown-active').attr('onclick','');
 		dropDown.children('.dropdown-item:not(.dropdown-active)').slideUp();
 		dropDown.attr('onclick','backgroundDropdown()');
+		//FF bug, delay being able to open the dropdown by 1 millisecond
 		setTimeout('dropDownFlag=false',1);
 	}
 }
 
 var MessageBox = {
 	'Show': function (title, text, buttonHTML) {
+		//WP7 already has the smexy alert box, use native
 		if (navigator.userAgent.search('Windows Phone') != -1) {
 			alert(text);
 		}
@@ -212,8 +213,10 @@ var Settings = {
 			return;
 		}
 		else {
+			//All future settings should be loaded here
 			accent=settings.accent;
 		}
+		//All required functions called with settings
 		accentChange(accent);
 	},
 	
@@ -222,14 +225,14 @@ var Settings = {
 	},
 	
 	'firstRun': function () {
-		//First run settings, defaults go here
+		//First run settings
 		var settings = defaultSettings;
 		saveData['Settings']=settings;
 		Settings.save();
 		Settings.init();
 	},
-	
 	'firstMetroRun': function () {
+		//First Metro run, preserve already saved settings
 		saveData['Settings'] = $.extend(saveData['Settings'],defaultSettings);
 		Settings.save();
 		Settings.init();
@@ -247,6 +250,7 @@ function search(input) {
 		var pattern=new RegExp(input,"i");
 		var results=[];
 		for (var i=0; i<l; i++) {
+			//RegExp the input and push results to array
 			if (pattern.test(allGames[i].name)) {
 				results.push(allGames[i]);
 			}
@@ -254,6 +258,7 @@ function search(input) {
 		var l = results.length;
 		var HTML='';
 		var name, id, cover;
+		//Loop through the results and make the HTML
 		for (var i=0; i<l; i++) {
 			name=results[i].name;
 			id=results[i].id;
@@ -264,20 +269,93 @@ function search(input) {
 	}
 }
 
+function pinToMain(id, name) {
+	var HTML='';
+	//Build the tile
+	HTML+='<a href="#details-page?'+id+'&'+escape(name)+'">';
+	HTML+='<div class="tile accent animate" style="background-image:url(\'covers/'+id+'.jpg\'); background-size: 173px;">';
+	HTML+='<span class="tile-title">'+name+'</span>';
+	HTML+='</div></a>';
+	//Append to main menu
+	document.getElementById('main-screen').innerHTML+=HTML;
+}
+
+var Fav = {
+	'createList': function (listName, id, name) {
+		var favLists = Fav.lists();
+		if ($.isEmptyObject(favLists)) {
+			favLists={};
+		}
+		else if (listName in favLists) {
+				MessageBox.Show('List "'+unescape(listName)+'" already exists!');
+				return;
+		}
+		favLists[listName]=[];
+		Fav.save(favLists, false);
+		Fav.addToList(listName, id, name);
+	},
+	'removeList': function (listName) {
+		var favLists = Fav.lists();
+		delete favLists[listName];
+		Fav.save(favLists, true);
+	},
+	'addToList': function (listName, id, name) {
+		var favLists = Fav.lists();
+		var gameList = favLists[listName];
+		gameList.push({
+			"id" : id,
+			"name" : name });
+		Fav.save(favLists, true);
+	},
+	'removeFromList': function (listName, id) {
+		var favLists = Fav.lists();
+		var gameList = favLists[listName];
+		var index = Fav.findIndex(gameList, id);
+		gameList.splice(index,1);
+		if (gameList.length==0) {
+			removeList(listName);
+		}
+		Fav.save(favLists, true);
+	},
+	'findList': function (id) {
+		var savedFavLists = Fav.lists();
+		var foundLists = [];
+		for (var i in savedFavLists) {
+			if (JSON.stringify(savedFavLists[i]).indexOf(id)!=-1) foundLists.push(i);
+		}
+		return foundLists;
+	},
+	'findIndex': function (array, id) {
+		for (var i=0; i<array.length; i++) {
+			if (array[i]==id) return i;
+		}
+		return -1;
+	},
+	'lists': function () {
+		return saveData['FavLists'];
+	},
+	'save': function (favLists, toServer) {
+		saveData['FavLists'] = favLists;
+		if (toServer) {
+			Settings.save();
+		}
+	}
+}
+
 var Tile = {
 	'animateHalf': function (tile) {
 		$(tile).animate({backgroundPosition: '0 86px'});
-		$(tile).children('.tile-title').animate({bottom: '92px'});
+		$(tile).children('span').animate({bottom: '92px'});
 		//setTimeout(Tile.animateDown, 2500);
 	},
 	'animateDown': function (tile) {
 		$(tile).animate({backgroundPosition: '0 173px'});
-		$(tile).children('.tile-title').animate({bottom: '6px'});
+		$(tile).children('span').animate({bottom: '6px'});
 		//setTimeout(Tile.animateUp, 2500);
 	},
 	'animateUp': function (tile) {
 		$(tile).animate({backgroundPosition: '0 0'});
-		$(tile).children('.tile-title').animate({bottom: '179px'});
+		$(tile).children('span').animate({bottom: '179px'});
 		//setTimeout(Tile.animateHalf, 2500);
 	},
 	'animateNext': function(tile,index) {

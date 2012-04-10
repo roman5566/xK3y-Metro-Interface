@@ -1,3 +1,19 @@
+.appbar {
+	position:fixed;
+	background-color:#1F1F1F;
+	height:72px;
+	width:480px;
+	bottom:0px;
+	left:0px;
+}
+
+.appbar img {
+	margin:12px 12px 12px 0px;
+	width:48px;
+	display:inline;
+	border:none;
+}
+
 .tile {
 	width:173px;
 	height:173px;
@@ -44,7 +60,7 @@
 	padding: 12px 0px 18px 18px;
 }
 
-#coverwallcontainer, #folderstructurecontainer {
+#coverwallcontainer, #folderstructurecontainer, #listcontainer {
 	margin-left:-6px
 }
 
@@ -77,6 +93,7 @@
 	font-size: 54pt;
 	line-height:40px;
 	white-space:nowrap;
+	left:2px;
 }
 
 .game {
@@ -308,7 +325,7 @@ a.button {
 	word-spacing:0px;
 }
 
-.tile-animate {
+.animate>span {
 	bottom:179px;
 }
 
